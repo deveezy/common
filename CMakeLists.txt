@@ -50,8 +50,14 @@ include_directories(SYSTEM "${CMAKE_CURRENT_SOURCE_DIR}/modules")
 include_directories(SYSTEM "${CMAKE_CURRENT_SOURCE_DIR}/plugins")
 
 # Library
-set(LIB_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/system/console.hpp")
-set(LIB_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/source/system/console.cpp")
+set(LIB_HEADER_FILES
+  "${CMAKE_CURRENT_SOURCE_DIR}/include/system/console.hpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/include/system/environment.hpp"
+)
+set(LIB_SOURCE_FILES
+  "${CMAKE_CURRENT_SOURCE_DIR}/source/system/console.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/source/system/environment.cpp"
+)
 add_library(${CMAKE_PROJECT_NAME} ${LIB_HEADER_FILES} ${LIB_SOURCE_FILES})
 
 set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES COMPILE_FLAGS "${PEDANTIC_COMPILE_FLAGS}" FOLDER "libraries")
@@ -66,8 +72,7 @@ list(APPEND INSTALL_TARGETS ${CMAKE_PROJECT_NAME})
 list(APPEND LINKLIBS ${CMAKE_PROJECT_NAME})
 
 if(NOT CPPCOMMON_MODULE)
-
-#   # Examples
+  # # Examples
   file(GLOB EXAMPLE_HEADER_FILES "examples/*.hpp")
   file(GLOB EXAMPLE_INLINE_FILES "examples/*.inl")
   file(GLOB EXAMPLE_SOURCE_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/examples" "examples/*.cpp")
@@ -80,6 +85,7 @@ if(NOT CPPCOMMON_MODULE)
     add_dependencies(${EXAMPLE_TARGET} ${CMAKE_PROJECT_NAME})
     set_target_properties(${EXAMPLE_TARGET} PROPERTIES COMPILE_FLAGS "${PEDANTIC_COMPILE_FLAGS}" FOLDER "examples")
     target_link_libraries(${EXAMPLE_TARGET} ${LINKLIBS})
+
     # list(APPEND INSTALL_TARGETS ${EXAMPLE_TARGET})
     # list(APPEND INSTALL_TARGETS_PDB ${EXAMPLE_TARGET})
   endforeach()
