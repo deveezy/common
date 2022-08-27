@@ -111,4 +111,31 @@ std::map<std::string, std::string> Environment::envars() {
   return res;
 }
 
+std::string Environment::GetEnvar(const std::string _name) {
+#if defined(unix) || defined(__unix) || defined(__unix__) || defined(__APPLE__)
+  char *envar = getenv(_name.c_str());
+  return (envar != nullptr) ? std::string{envar} : std::string{};
+#elif defined(_WIN32) || defined(_WIN64)
+#endif
+}
+
+void Environment::SetEnvar(const std::string _name, const std::string _value) {
+#if defined(unix) || defined(__unix) || defined(__unix__) || defined(__APPLE__)
+  if (setenv(_name.c_str(), _value.c_str(), 1) != 0)
+    throwex SystemException("Cannot set environment variable - " + _name);
+#elif defined(_WIN32) || defined(_WIN64)
+
+#endif
+}
+
+void Environment::ClearEnvar(const std::string _name) {
+#if defined(unix) || defined(__unix) || defined(__unix__) || defined(__APPLE__)
+  if (unsetenv(_name.c_str()) != 0)
+    throwex SystemException("Cannot clear environment variable - " + _name);
+#elif defined(_WIN32) || defined(_WIN64)
+  if (!SetEnvironmentVariableW(Encoding::FromUTF8(name).c_str(), nullptr))
+    throwex SystemException("Cannot clear environment variable - " + name);
+#endif
+}
+
 } // namespace common

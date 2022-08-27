@@ -51,12 +51,24 @@ include_directories(SYSTEM "${CMAKE_CURRENT_SOURCE_DIR}/plugins")
 
 # Library
 set(LIB_HEADER_FILES
+  "${CMAKE_CURRENT_SOURCE_DIR}/include/common/reader.hpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/include/common/writer.hpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/include/utility/countof.hpp"
+
   "${CMAKE_CURRENT_SOURCE_DIR}/include/system/console.hpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/include/system/environment.hpp"
+
+  # "${CMAKE_CURRENT_SOURCE_DIR}/include/errors/.hpp"
 )
+
 set(LIB_SOURCE_FILES
+  "${CMAKE_CURRENT_SOURCE_DIR}/source/common/reader.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/source/common/writer.cpp"
+
   "${CMAKE_CURRENT_SOURCE_DIR}/source/system/console.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/source/system/environment.cpp"
+
+  # "${CMAKE_CURRENT_SOURCE_DIR}/source/errors/.cpp"
 )
 add_library(${CMAKE_PROJECT_NAME} ${LIB_HEADER_FILES} ${LIB_SOURCE_FILES})
 
