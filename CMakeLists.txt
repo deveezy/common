@@ -2,11 +2,10 @@ cmake_minimum_required(VERSION 3.20)
 set(CMAKE_CXX_STANDARD 20)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+include(compiler_features)
 project(cppcommon)
 
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-
-include(compiler_features)
 include(compiler_warnings)
 include(platform_features)
 include(system_information)
@@ -53,6 +52,9 @@ include_directories(SYSTEM "${CMAKE_CURRENT_SOURCE_DIR}/plugins")
 set(LIB_HEADER_FILES
   "${CMAKE_CURRENT_SOURCE_DIR}/include/common/reader.hpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/include/common/writer.hpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/include/common/flags.hpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/include/common/function.hpp"
+
   "${CMAKE_CURRENT_SOURCE_DIR}/include/utility/countof.hpp"
 
   "${CMAKE_CURRENT_SOURCE_DIR}/include/system/console.hpp"
