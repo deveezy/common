@@ -1,6 +1,7 @@
 #include <pthread.h>
 #include <system/environment.hpp>
 #include <iostream>
+#include <stdint.h>
 
 int main() {
   // std::cout << common::Environment::OSVersion();
@@ -8,5 +9,6 @@ int main() {
   for (const auto &elem : res) {
     std::cout << elem.first << "=" << elem.second << "\n";
   }
+  
   return 0;
 }
