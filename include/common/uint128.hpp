@@ -145,11 +145,54 @@ public:
     return _value1 % uint128_t{_value2};
   }
   friend uint128_t operator%(const uint128_t &_value1, const uint128_t &_value2) noexcept;
+
+  // Bit operators
+  uint128_t operator~() const noexcept { return uint128_t{~upper, ~lower}; }
+
+  uint128_t &operator&=(const uint128_t &_value) noexcept { return *this = *this & _value; }
+  uint128_t &operator|=(const uint128_t &_value) noexcept { return *this = *this | _value; }
+  uint128_t &operator^=(const uint128_t &_value) noexcept { return *this = *this ^ _value; }
+
+  template <typename T>
+  uint128_t &operator&=(const T &_value) noexcept {
+    return *this = *this & uint128_t{_value};
+  };
+
+  template <typename T>
+  uint128_t &operator|=(const T &_value) noexcept {
+    return *this = *this | uint128_t{_value};
+  };
+
+  template <typename T>
+  uint128_t &operator^=(const T &_value) noexcept {
+    return *this = *this ^ uint128_t { _value };
+  };
+
+  template <typename T>
+  friend T &operator&=(T &_value1, const uint128_t &_value2) noexcept {
+    return _value1 = (T)(uint128_t(_value1) & _value2);
+  }
+  template <typename T>
+  friend T &operator|=(T &value1, const uint128_t &value2) noexcept {
+    return value1 = (T)(uint128_t(value1) | value2);
+  }
+  template <typename T>
+  friend T &operator^=(T &value1, const uint128_t &value2) noexcept {
+    return value1 = (T)(uint128_t(value1) ^ value2);
+  }
+
+  template <typename T>
+  friend uint128_t operator&(const T &_value1, const uint128_t &_value2) noexcept {
+    return uint128_t(_value1) & _value2;
+  }
+  template <typename T>
+  friend uint128_t operator&(const uint128_t &_value1, const T &_value2) noexcept {
+    return _value1 & uint128_t(_value2);
+  }
+  friend uint128_t operator&(const uint128_t &_value1, const uint128_t &value2) noexcept;
+
+private:
+  uint64_t upper;
+  uint64_t lower;
 };
 } // namespace common
-
-int main() {
-  common::uint128_t val = 10;
-  +val;
-  return 0;
-}
