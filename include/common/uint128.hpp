@@ -1,6 +1,9 @@
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
+#include <istream>
+#include <string>
 
 namespace common
 {
@@ -8,169 +11,167 @@ class uint128_t
 {
 public:
   uint128_t() noexcept;
-  uint128_t(int8_t) noexcept;
-  uint128_t(uint8_t) noexcept;
-  uint128_t(int16_t) noexcept;
-  uint128_t(uint16_t) noexcept;
-  uint128_t(int32_t) noexcept;
-  uint128_t(uint32_t) noexcept;
-  uint128_t(int64_t) noexcept;
-  uint128_t(uint64_t) noexcept;
-
+  uint128_t(int8_t value) noexcept;
+  uint128_t(uint8_t value) noexcept;
+  uint128_t(int16_t value) noexcept;
+  uint128_t(uint16_t value) noexcept;
+  uint128_t(int32_t value) noexcept;
+  uint128_t(uint32_t value) noexcept;
+  uint128_t(int64_t value) noexcept;
+  uint128_t(uint64_t value) noexcept;
   template <typename T>
-  explicit uint128_t(const T &_value) noexcept;
+  explicit uint128_t(const T &value) noexcept;
 
   template <typename TUpper, typename TLower>
-  uint128_t(const TUpper &_upper, const TLower &_lower) noexcept;
+  uint128_t(const TUpper &upper, const TLower &lower) noexcept;
 
-  uint128_t(const uint128_t &_value) noexcept = default;
-  uint128_t(uint128_t &&_value) noexcept = default;
+  uint128_t(const uint128_t &value) noexcept = default;
+  uint128_t(uint128_t &&value) noexcept = default;
   ~uint128_t() noexcept = default;
 
   template <typename T>
-  uint128_t &operator=(const T &_value) noexcept;
-  uint128_t &operator=(const uint128_t &_value) noexcept = default;
-  uint128_t &operator=(uint128_t &&_value) noexcept = default;
+  uint128_t &operator=(const T &value) noexcept;
+  uint128_t &operator=(const uint128_t &value) noexcept = default;
+  uint128_t &operator=(uint128_t &&value) noexcept = default;
 
+  // Arithmetic operators
   uint128_t operator+() const noexcept { return *this; }
   uint128_t operator-() const noexcept { return ~*this + 1; }
 
   uint128_t &operator++() noexcept { return *this += 1; }
   uint128_t operator++(int) noexcept {
-    uint128_t tmp{*this};
+    uint128_t temp(*this);
     ++*this;
-    return tmp;
+    return temp;
   }
   uint128_t &operator--() noexcept { return *this -= 1; }
   uint128_t operator--(int) noexcept {
-    uint128_t tmp{*this};
+    uint128_t temp(*this);
     --*this;
-    return tmp;
+    return temp;
   }
 
-  uint128_t &operator+=(const uint128_t &_value) noexcept { return *this = *this + _value; }
-  uint128_t &operator-=(const uint128_t &_value) noexcept { return *this = *this - _value; }
-  uint128_t &operator*=(const uint128_t &_value) noexcept { return *this = *this * _value; }
-  uint128_t &operator/=(const uint128_t &_value) noexcept { return *this = *this / _value; }
-  uint128_t &operator%=(const uint128_t &_value) noexcept { return *this = *this % _value; }
+  uint128_t &operator+=(const uint128_t &value) noexcept { return *this = *this + value; }
+  uint128_t &operator-=(const uint128_t &value) noexcept { return *this = *this - value; }
+  uint128_t &operator*=(const uint128_t &value) noexcept { return *this = *this * value; }
+  uint128_t &operator/=(const uint128_t &value) { return *this = *this / value; }
+  uint128_t &operator%=(const uint128_t &value) { return *this = *this % value; }
 
   template <typename T>
-  uint128_t &operator+=(const T &_value) noexcept {
-    return *this = *this + uint128_t{_value};
+  uint128_t &operator+=(const T &value) noexcept {
+    return *this = *this + uint128_t(value);
   }
   template <typename T>
-  uint128_t &operator-=(const T &_value) noexcept {
-    return *this = *this - uint128_t{_value};
+  uint128_t &operator-=(const T &value) noexcept {
+    return *this = *this - uint128_t(value);
   }
   template <typename T>
-  uint128_t &operator*=(const T &_value) noexcept {
-    return *this = *this * uint128_t{_value};
+  uint128_t &operator*=(const T &value) noexcept {
+    return *this = *this * uint128_t(value);
   }
   template <typename T>
-  uint128_t &operator/=(const T &_value) noexcept {
-    return *this = *this / uint128_t{_value};
+  uint128_t &operator/=(const T &value) {
+    return *this = *this / uint128_t(value);
   }
   template <typename T>
-  uint128_t &operator%=(const T &_value) noexcept {
-    return *this = *this % uint128_t{_value};
-  }
-
-  template <typename T>
-  friend T &operator+=(T &_value1, const uint128_t &_value2) noexcept {
-    return _value1 = (T)(uint128_t(_value1) + _value2);
-  }
-  template <typename T>
-  friend T &operator-=(T &_value1, const uint128_t &_value2) noexcept {
-    return _value1 = (T)(uint128_t(_value1) - _value2);
-  }
-  template <typename T>
-  friend T &operator*=(T &_value1, const uint128_t &_value2) noexcept {
-    return _value1 = (T)(uint128_t(_value1) * _value2);
-  }
-  template <typename T>
-  friend T &operator/=(T &_value1, const uint128_t &_value2) noexcept {
-    return _value1 = (T)(uint128_t(_value1) / _value2);
-  }
-  template <typename T>
-  friend T &operator%=(T &_value1, const uint128_t &_value2) noexcept {
-    return _value1 = (T)(uint128_t(_value1) % _value2);
+  uint128_t &operator%=(const T &value) {
+    return *this = *this % uint128_t(value);
   }
 
   template <typename T>
-  friend T operator+(T &_value1, const uint128_t &_value2) noexcept {
-    return uint128_t{_value1} + _value2;
+  friend T &operator+=(T &value1, const uint128_t &value2) noexcept {
+    return value1 = (T)(uint128_t(value1) + value2);
   }
   template <typename T>
-  friend T operator+(const uint128_t &_value1, T &_value2) noexcept {
-    return _value1 + uint128_t{_value2};
+  friend T &operator-=(T &value1, const uint128_t &value2) noexcept {
+    return value1 = (T)(uint128_t(value1) - value2);
   }
-  friend uint128_t operator+(const uint128_t &_value1, const uint128_t &_value2) noexcept;
+  template <typename T>
+  friend T &operator*=(T &value1, const uint128_t &value2) noexcept {
+    return value1 = (T)(uint128_t(value1) * value2);
+  }
+  template <typename T>
+  friend T &operator/=(T &value1, const uint128_t &value2) {
+    return value1 = (T)(uint128_t(value1) / value2);
+  }
+  template <typename T>
+  friend T &operator%=(T &value1, const uint128_t &value2) {
+    return value1 = (T)(uint128_t(value1) % value2);
+  }
 
   template <typename T>
-  friend T operator-(T &_value1, const uint128_t &_value2) noexcept {
-    return uint128_t{_value1} - _value2;
+  friend uint128_t operator+(const T &value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) + value2;
   }
   template <typename T>
-  friend T operator-(const uint128_t &_value1, T &_value2) noexcept {
-    return _value1 - uint128_t{_value2};
+  friend uint128_t operator+(const uint128_t &value1, const T &value2) noexcept {
+    return value1 + uint128_t(value2);
   }
-  friend uint128_t operator-(const uint128_t &_value1, const uint128_t &_value2) noexcept;
+  friend uint128_t operator+(const uint128_t &value1, const uint128_t &value2) noexcept;
 
   template <typename T>
-  friend T operator*(T &_value1, const uint128_t &_value2) noexcept {
-    return uint128_t{_value1} * _value2;
+  friend uint128_t operator-(const T &value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) - value2;
   }
   template <typename T>
-  friend T operator*(const uint128_t &_value1, T &_value2) noexcept {
-    return _value1 * uint128_t{_value2};
+  friend uint128_t operator-(const uint128_t &value1, const T &value2) noexcept {
+    return value1 - uint128_t(value2);
   }
-  friend uint128_t operator*(const uint128_t &_value1, const uint128_t &_value2) noexcept;
+  friend uint128_t operator-(const uint128_t &value1, const uint128_t &value2) noexcept;
 
   template <typename T>
-  friend T operator/(T &_value1, const uint128_t &_value2) noexcept {
-    return uint128_t{_value1} / _value2;
+  friend uint128_t operator*(const T &value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) * value2;
   }
   template <typename T>
-  friend T operator/(const uint128_t &_value1, T &_value2) noexcept {
-    return _value1 / uint128_t{_value2};
+  friend uint128_t operator*(const uint128_t &value1, const T &value2) noexcept {
+    return value1 * uint128_t(value2);
   }
-  friend uint128_t operator/(const uint128_t &_value1, const uint128_t &_value2) noexcept;
+  friend uint128_t operator*(const uint128_t &value1, const uint128_t &value2) noexcept;
 
   template <typename T>
-  friend T operator%(T &_value1, const uint128_t &_value2) noexcept {
-    return uint128_t{_value1} % _value2;
+  friend uint128_t operator/(const T &value1, const uint128_t &value2) {
+    return uint128_t(value1) / value2;
   }
   template <typename T>
-  friend T operator%(const uint128_t &_value1, T &_value2) noexcept {
-    return _value1 % uint128_t{_value2};
+  friend uint128_t operator/(const uint128_t &value1, const T &value2) {
+    return value1 / uint128_t(value2);
   }
-  friend uint128_t operator%(const uint128_t &_value1, const uint128_t &_value2) noexcept;
+  friend uint128_t operator/(const uint128_t &value1, const uint128_t &value2);
+
+  template <typename T>
+  friend uint128_t operator%(const T &value1, const uint128_t &value2) {
+    return uint128_t(value1) % value2;
+  }
+  template <typename T>
+  friend uint128_t operator%(const uint128_t &value1, const T &value2) {
+    return value1 % uint128_t(value2);
+  }
+  friend uint128_t operator%(const uint128_t &value1, const uint128_t &value2);
 
   // Bit operators
-  uint128_t operator~() const noexcept { return uint128_t{~upper, ~lower}; }
+  uint128_t operator~() const noexcept { return uint128_t(~hi, ~lo); }
 
-  uint128_t &operator&=(const uint128_t &_value) noexcept { return *this = *this & _value; }
-  uint128_t &operator|=(const uint128_t &_value) noexcept { return *this = *this | _value; }
-  uint128_t &operator^=(const uint128_t &_value) noexcept { return *this = *this ^ _value; }
-
-  template <typename T>
-  uint128_t &operator&=(const T &_value) noexcept {
-    return *this = *this & uint128_t{_value};
-  };
+  uint128_t &operator&=(const uint128_t &value) noexcept { return *this = *this & value; }
+  uint128_t &operator|=(const uint128_t &value) noexcept { return *this = *this | value; }
+  uint128_t &operator^=(const uint128_t &value) noexcept { return *this = *this ^ value; }
 
   template <typename T>
-  uint128_t &operator|=(const T &_value) noexcept {
-    return *this = *this | uint128_t{_value};
-  };
+  uint128_t &operator&=(const T &value) noexcept {
+    return *this = *this & uint128_t(value);
+  }
+  template <typename T>
+  uint128_t &operator|=(const T &value) noexcept {
+    return *this = *this | uint128_t(value);
+  }
+  template <typename T>
+  uint128_t &operator^=(const T &value) noexcept {
+    return *this = *this ^ uint128_t(value);
+  }
 
   template <typename T>
-  uint128_t &operator^=(const T &_value) noexcept {
-    return *this = *this ^ uint128_t { _value };
-  };
-
-  template <typename T>
-  friend T &operator&=(T &_value1, const uint128_t &_value2) noexcept {
-    return _value1 = (T)(uint128_t(_value1) & _value2);
+  friend T &operator&=(T &value1, const uint128_t &value2) noexcept {
+    return value1 = (T)(uint128_t(value1) & value2);
   }
   template <typename T>
   friend T &operator|=(T &value1, const uint128_t &value2) noexcept {
@@ -182,17 +183,242 @@ public:
   }
 
   template <typename T>
-  friend uint128_t operator&(const T &_value1, const uint128_t &_value2) noexcept {
-    return uint128_t(_value1) & _value2;
+  friend uint128_t operator&(const T &value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) & value2;
   }
   template <typename T>
-  friend uint128_t operator&(const uint128_t &_value1, const T &_value2) noexcept {
-    return _value1 & uint128_t(_value2);
+  friend uint128_t operator&(const uint128_t &value1, const T &value2) noexcept {
+    return value1 & uint128_t(value2);
   }
-  friend uint128_t operator&(const uint128_t &_value1, const uint128_t &value2) noexcept;
+  friend uint128_t operator&(const uint128_t &value1, const uint128_t &value2) noexcept;
+
+  template <typename T>
+  friend uint128_t operator|(const T &value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) | value2;
+  }
+  template <typename T>
+  friend uint128_t operator|(const uint128_t &value1, const T &value2) noexcept {
+    return value1 | uint128_t(value2);
+  }
+  friend uint128_t operator|(const uint128_t &value1, const uint128_t &value2) noexcept;
+
+  template <typename T>
+  friend uint128_t operator^(const T &value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) ^ value2;
+  }
+  template <typename T>
+  friend uint128_t operator^(const uint128_t &value1, const T &value2) noexcept {
+    return value1 ^ uint128_t(value2);
+  }
+  friend uint128_t operator^(const uint128_t &value1, const uint128_t &value2) noexcept;
+
+  // Comparison operators
+  template <typename T>
+  friend bool operator==(const T &value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) == value2;
+  }
+  template <typename T>
+  friend bool operator==(const uint128_t &value1, const T &value2) noexcept {
+    return value1 == uint128_t(value2);
+  }
+  friend bool operator==(const uint128_t &value1, const uint128_t &value2) noexcept;
+
+  template <typename T>
+  friend bool operator!=(const T &value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) != value2;
+  }
+  template <typename T>
+  friend bool operator!=(const uint128_t &value1, const T &value2) noexcept {
+    return value1 != uint128_t(value2);
+  }
+  friend bool operator!=(const uint128_t &value1, const uint128_t &value2) noexcept;
+
+  template <typename T>
+  friend bool operator<(const T &value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) < value2;
+  }
+  template <typename T>
+  friend bool operator<(const uint128_t &value1, const T &value2) noexcept {
+    return value1 < uint128_t(value2);
+  }
+  friend bool operator<(const uint128_t &value1, const uint128_t &value2) noexcept;
+
+  template <typename T>
+  friend bool operator>(const T &value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) > value2;
+  }
+  template <typename T>
+  friend bool operator>(const uint128_t &value1, const T &value2) noexcept {
+    return value1 > uint128_t(value2);
+  }
+  friend bool operator>(const uint128_t &value1, const uint128_t &value2) noexcept;
+
+  template <typename T>
+  friend bool operator<=(const T &value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) <= value2;
+  }
+  template <typename T>
+  friend bool operator<=(const uint128_t &value1, const T &value2) noexcept {
+    return value1 <= uint128_t(value2);
+  }
+  friend bool operator<=(const uint128_t &value1, const uint128_t &value2) noexcept;
+
+  template <typename T>
+  friend bool operator>=(const T &value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) >= value2;
+  }
+  template <typename T>
+  friend bool operator>=(const uint128_t &value1, const T &value2) noexcept {
+    return value1 >= uint128_t(value2);
+  }
+  friend bool operator>=(const uint128_t &value1, const uint128_t &value2) noexcept;
+
+  // Logical operators
+  bool operator!() const noexcept { return !(bool)(hi | lo); }
+
+  template <typename T>
+  friend bool operator&&(const T &value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) && value2;
+  }
+  template <typename T>
+  friend bool operator&&(const uint128_t &value1, const T &value2) noexcept {
+    return value1 && uint128_t(value2);
+  }
+  friend bool operator&&(const uint128_t &value1, const uint128_t &value2) noexcept;
+
+  template <typename T>
+  friend bool operator||(const T &value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) || value2;
+  }
+  template <typename T>
+  friend bool operator||(const uint128_t &value1, const T &value2) noexcept {
+    return value1 || uint128_t(value2);
+  }
+  friend bool operator||(const uint128_t &value1, const uint128_t &value2) noexcept;
+
+  // Shift operators
+  uint128_t &operator<<=(const uint128_t &value) noexcept { return *this = *this << value; }
+  uint128_t &operator>>=(const uint128_t &value) noexcept { return *this = *this >> value; }
+
+  template <typename T>
+  uint128_t &operator<<=(const T &value) noexcept {
+    return *this = *this << uint128_t(value);
+  }
+  template <typename T>
+  uint128_t &operator>>=(const T &value) noexcept {
+    return *this = *this >> uint128_t(value);
+  }
+
+  template <typename T>
+  friend T &operator<<=(T &value1, const uint128_t &value2) noexcept {
+    return value1 = (T)(uint128_t(value1) << value2);
+  }
+  template <typename T>
+  friend T &operator>>=(T &value1, const uint128_t &value2) noexcept {
+    return value1 = (T)(uint128_t(value1) >> value2);
+  }
+
+  template <typename T>
+  friend uint128_t operator<<(const uint128_t &value1, const T &value2) noexcept {
+    return value1 << uint128_t(value2);
+  }
+  friend uint128_t operator<<(bool value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) << value2;
+  }
+  friend uint128_t operator<<(int8_t value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) << value2;
+  }
+  friend uint128_t operator<<(int16_t value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) << value2;
+  }
+  friend uint128_t operator<<(int32_t value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) << value2;
+  }
+  friend uint128_t operator<<(int64_t value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) << value2;
+  }
+  friend uint128_t operator<<(uint8_t value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) << value2;
+  }
+  friend uint128_t operator<<(uint16_t value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) << value2;
+  }
+  friend uint128_t operator<<(uint32_t value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) << value2;
+  }
+  friend uint128_t operator<<(uint64_t value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) << value2;
+  }
+  friend uint128_t operator<<(const uint128_t &value1, const uint128_t &value2) noexcept;
+
+  template <typename T>
+  friend uint128_t operator>>(const uint128_t &value1, const T &value2) noexcept {
+    return value1 >> uint128_t(value2);
+  }
+  friend uint128_t operator>>(bool value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) >> value2;
+  }
+  friend uint128_t operator>>(int8_t value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) >> value2;
+  }
+  friend uint128_t operator>>(int16_t value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) >> value2;
+  }
+  friend uint128_t operator>>(int32_t value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) >> value2;
+  }
+  friend uint128_t operator>>(int64_t value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) >> value2;
+  }
+  friend uint128_t operator>>(uint8_t value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) >> value2;
+  }
+  friend uint128_t operator>>(uint16_t value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) >> value2;
+  }
+  friend uint128_t operator>>(uint32_t value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) >> value2;
+  }
+  friend uint128_t operator>>(uint64_t value1, const uint128_t &value2) noexcept {
+    return uint128_t(value1) >> value2;
+  }
+  friend uint128_t operator>>(const uint128_t &value1, const uint128_t &value2) noexcept;
+
+  // Type cast
+  operator bool() const noexcept { return (bool)(lo | hi); }
+  operator uint8_t() const noexcept { return (uint8_t)lo; }
+  operator uint16_t() const noexcept { return (uint16_t)lo; }
+  operator uint32_t() const noexcept { return (uint32_t)lo; }
+  operator uint64_t() const noexcept { return (uint64_t)lo; }
+
+  uint64_t upper() const noexcept { return hi; }
+  uint64_t lower() const noexcept { return lo; }
+
+  // Get the count of bits
+  size_t bits() const noexcept;
+
+  std::string string(size_t base = 10, size_t length = 0) const;
+  std::wstring wstring(size_t base = 10, size_t length = 0) const;
+
+  static std::pair<uint128_t, uint128_t> divmod(const uint128_t &_x, const uint128_t &_y);
+
+  friend std::istream &operator>>(std::istream &_is, uint128_t &_value) {
+    _is >> _value.hi >> _value.lo;
+    return _is;
+  }
+  friend std::wistream &operator>>(std::wistream &_is, uint128_t &_value) {
+    _is >> _value.hi >> _value.lo;
+    return _is;
+  }
+
+  friend std::ostream &operator<<(std::ostream &_os, const uint128_t &_value);
+  friend std::wostream &operator<<(std::wostream &_os, const uint128_t &_value);
+
+  void swap(uint128_t &_value) noexcept;
+  friend void swap(uint128_t &_value1, uint128_t &_value2) noexcept;
 
 private:
-  uint64_t upper;
-  uint64_t lower;
+  uint64_t lo;
+  uint64_t hi;
 };
 } // namespace common
