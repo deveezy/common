@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <istream>
 #include <string>
+#include <type_traits>
 
 namespace common
 {
@@ -421,4 +422,57 @@ private:
   uint64_t lo;
   uint64_t hi;
 };
+
+inline uint128_t::uint128_t() noexcept
+  : lo{0}
+  , hi{0} {}
+
+inline uint128_t::uint128_t(int8_t value) noexcept
+  : lo{static_cast<uint64_t>(value)}
+  , hi{} {}
+
+inline uint128_t::uint128_t(uint8_t value) noexcept
+  : lo{value}
+  , hi{} {}
+
+inline uint128_t::uint128_t(int16_t value) noexcept
+  : lo{static_cast<uint64_t>(value)}
+  , hi{} {}
+
+inline uint128_t::uint128_t(uint16_t value) noexcept
+  : lo{value}
+  , hi{} {}
+
+inline uint128_t::uint128_t(int32_t value) noexcept
+  : lo{static_cast<uint64_t>(value)}
+  , hi{} {}
+
+inline uint128_t::uint128_t(uint32_t value) noexcept
+  : lo{value}
+  , hi{} {}
+
+inline uint128_t::uint128_t(int64_t value) noexcept
+  : lo{static_cast<uint64_t>(value)}
+  , hi{} {}
+
+inline uint128_t::uint128_t(uint64_t value) noexcept
+  : lo{value}
+  , hi{} {}
+
+template <typename T>
+inline uint128_t::uint128_t(const T &value) noexcept
+  : lo{static_cast<uint64_t>(value)}
+  , hi{} {
+  static_assert((std::is_integral_v<T> || std::is_same_v<T, uint128_t>),
+                "Input argument type must be an integer!");
+}
+
+template <typename TUpper, typename TLower>
+inline uint128_t::uint128_t(const TUpper &upper, const TLower &lower) noexcept
+  : lo{static_cast<uint64_t>(lower)}
+  , hi{static_cast<uint64_t>(upper)} {
+  static_assert(((std::is_integral_v<TUpper> || std::is_same_v<TUpper, uint128_t>)&&(
+                  std::is_integral_v<TUpper> || std::is_same_v<TUpper, uint128_t>)),
+                "Input argument type must be an integers!");
+}
 } // namespace common
