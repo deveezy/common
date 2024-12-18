@@ -10,7 +10,7 @@
 
 // #include <userver/utils/boost_filesystem_file_status.hpp>
 
-#include <utils/fs/open_mode.hpp>
+#include <fs/open_mode.hpp>
 #include <utils/fast_pimpl.hpp>
 #include <filesystem>
 
