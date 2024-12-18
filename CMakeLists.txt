@@ -42,11 +42,14 @@ add_library(
 
   ${SRC_DIR}/compiler/demangle.cpp
 
-  ${SRC_DIR}/utils/fast_pimpl.cpp
   ${SRC_DIR}/utils/assert.cpp
 )
 
 target_include_directories(${LIB_NAME} PRIVATE ${INCLUDE_DIR})
+
+add_executable(exe ${CMAKE_SOURCE_DIR}/exe/time_of_day_exe.cpp)
+target_link_libraries(exe PRIVATE ${LIB_NAME})
+target_include_directories(exe PRIVATE ${INCLUDE_DIR})
 
 # add_executable(${CMAKE_PROJECT_NAME}
 #   # "src/main.cpp"
