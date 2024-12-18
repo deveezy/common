@@ -43,6 +43,7 @@ add_library(
   ${SRC_DIR}/compiler/demangle.cpp
 
   ${SRC_DIR}/utils/fast_pimpl.cpp
+  ${SRC_DIR}/utils/assert.cpp
 )
 
 target_include_directories(${LIB_NAME} PRIVATE ${INCLUDE_DIR})
