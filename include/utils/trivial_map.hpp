@@ -11,8 +11,6 @@
 #include <utility>
 #include <variant>
 
-#include <fmt/format.h>
-
 #include <compiler/demangle.hpp>
 #include <utils/assert.hpp>
 
@@ -214,7 +212,7 @@ public:
   constexpr explicit SwitchByFirstICase(std::string_view search) noexcept : state_(search) {}
 
   constexpr SwitchByFirstICase &Case(std::string_view first, Second second) noexcept {
-    ASSERT_MSG(!impl::HasUppercaseAscii(first), fmt::format("String literal '{}' in utils::Switch*::Case() "
+    ASSERT_MSG(!impl::HasUppercaseAscii(first), std::format("String literal '{}' in utils::Switch*::Case() "
                                                             "should be in lower case",
                                                     first));
     if (!state_.IsFound() && state_.GetKey().size() == first.size() &&
@@ -241,7 +239,7 @@ public:
   constexpr explicit SwitchByFirstICase(std::string_view search) noexcept : state_(search) {}
 
   constexpr SwitchByFirstICase &Case(std::string_view first) noexcept {
-    ASSERT_MSG(!impl::HasUppercaseAscii(first), fmt::format("String literal '{}' in utils::Switch*::Case() "
+    ASSERT_MSG(!impl::HasUppercaseAscii(first), std::format("String literal '{}' in utils::Switch*::Case() "
                                                             "should be in lower case",
                                                     first));
     if (!state_.IsFound() && state_.GetKey().size() == first.size() &&
@@ -268,7 +266,7 @@ public:
   constexpr explicit SwitchBySecondICase(std::string_view search) noexcept : state_(search) {}
 
   constexpr SwitchBySecondICase &Case(First first, std::string_view second) noexcept {
-    ASSERT_MSG(!impl::HasUppercaseAscii(second), fmt::format("String literal '{}' in utils::Switch*::Case() "
+    ASSERT_MSG(!impl::HasUppercaseAscii(second), std::format("String literal '{}' in utils::Switch*::Case() "
                                                              "should be in lower case",
                                                      second));
     if (!state_.IsFound() && state_.GetKey().size() == second.size() &&
@@ -381,7 +379,7 @@ public:
   CaseDescriber &Case(First first, Second second) noexcept {
     if (!description_.empty()) { description_ += ", "; }
 
-    description_ += fmt::format("('{}', '{}')", first, second);
+    description_ += std::format("('{}', '{}')", first, second);
 
     return *this;
   }
@@ -403,7 +401,7 @@ public:
   CaseFirstDescriber &Case(First first) noexcept {
     if (!description_.empty()) { description_ += ", "; }
 
-    description_ += fmt::format("'{}'", first);
+    description_ += std::format("'{}'", first);
 
     return *this;
   }
@@ -430,7 +428,7 @@ public:
   CaseSecondDescriber &Case(First /*first*/, Second second) noexcept {
     if (!description_.empty()) { description_ += ", "; }
 
-    description_ += fmt::format("'{}'", second);
+    description_ += std::format("'{}'", second);
 
     return *this;
   }
@@ -798,7 +796,7 @@ template <typename ExceptionType = void, typename Value, typename BuilderFunc>
 auto ParseFromValueString(const Value &value, TrivialBiMap<BuilderFunc> map) {
   if constexpr (!std::is_void_v<ExceptionType>) {
     if (!value.IsString()) {
-      throw ExceptionType(fmt::format("Invalid value at '{}': expected a string", value.GetPath()));
+      throw ExceptionType(std::format("Invalid value at '{}': expected a string", value.GetPath()));
     }
   }
 
@@ -808,7 +806,7 @@ auto ParseFromValueString(const Value &value, TrivialBiMap<BuilderFunc> map) {
 
   using Exception = std::conditional_t<std::is_void_v<ExceptionType>, typename Value::Exception, ExceptionType>;
 
-  throw Exception(fmt::format("Invalid value of {} at '{}': '{}' is not one of {}",
+  throw Exception(std::format("Invalid value of {} at '{}': '{}' is not one of {}",
       compiler::GetTypeName<std::decay_t<decltype(*parsed)>>(), value.GetPath(), string,
       map.template DescribeByType<std::string>()));
 }
@@ -823,7 +821,7 @@ std::string_view EnumToStringView(Enum value, TrivialBiMap<BuilderFunc> map) {
   static_assert(std::is_enum_v<Enum>);
   if (const auto string = map.TryFind(value)) return *string;
 
-  INVARIANT(false, fmt::format("Invalid value of enum {}: {}", compiler::GetTypeName<Enum>(),
+  INVARIANT(false, std::format("Invalid value of enum {}: {}", compiler::GetTypeName<Enum>(),
                        static_cast<std::underlying_type_t<Enum>>(value)));
 }
 

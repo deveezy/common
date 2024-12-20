@@ -43,6 +43,7 @@ add_library(
   ${SRC_DIR}/compiler/demangle.cpp
 
   ${SRC_DIR}/utils/assert.cpp
+  ${SRC_DIR}/utils/string_to_duration.cpp
 )
 
 target_include_directories(${LIB_NAME} PRIVATE ${INCLUDE_DIR})
@@ -50,6 +51,8 @@ target_include_directories(${LIB_NAME} PRIVATE ${INCLUDE_DIR})
 add_executable(exe ${CMAKE_SOURCE_DIR}/exe/time_of_day_exe.cpp)
 target_link_libraries(exe PRIVATE ${LIB_NAME})
 target_include_directories(exe PRIVATE ${INCLUDE_DIR})
+
+add_subdirectory(${CMAKE_SOURCE_DIR}/tests)
 
 # add_executable(${CMAKE_PROJECT_NAME}
 #   # "src/main.cpp"
