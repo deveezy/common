@@ -47,6 +47,7 @@ add_library(
 )
 
 target_include_directories(${LIB_NAME} PRIVATE ${INCLUDE_DIR})
+target_link_libraries(${LIB_NAME} PRIVATE fmt)
 
 add_executable(exe ${CMAKE_SOURCE_DIR}/exe/time_of_day_exe.cpp)
 target_link_libraries(exe PRIVATE ${LIB_NAME})

@@ -17,14 +17,18 @@
 #include <utils/underlying_value.hpp>
 #include <utils/void_t.hpp>
 
+// namespace logging {
+// class LogHelper;  // Forward declaration
+// }
+
 namespace utils {
 
 enum class StrongTypedefOps {
   kNoCompare = 0,  /// Forbid all comparisons for StrongTypedef
 
-  kCompareStrong          = 1,  /// Allow comparing two StrongTypedef<Tag, T>
-  kCompareTransparentOnly = 2,  /// Allow comparing StrongTypedef<Tag, T> and T
-  kCompareTransparent     = 3,  /// Allow both of the above
+  kCompareStrong          = 1,  /// Allow comparing two StrongTypedef<Tag, T>. only SS = SS
+  kCompareTransparentOnly = 2,  /// Allow comparing StrongTypedef<Tag, T> and T. SS = std::string, SS != StringStrong
+  kCompareTransparent     = 3,  /// Allow both of the above, StringStrong = SS = std::string
 
   kNonLoggable = 4,  /// Forbid logging and serializing for StrongTypedef
 };
@@ -111,12 +115,12 @@ constexpr void CheckTransparentCompare() {
 struct StrongTypedefTag {};
 
 template <typename T>
-using IsStrongTypedef =
-    std::conjunction<std::is_base_of<StrongTypedefTag, T>, std::is_convertible<T &, StrongTypedefTag &>>;
+constexpr bool IsStrongTypedef =
+    std::conjunction_v<std::is_base_of<StrongTypedefTag, T>, std::is_convertible<T &, StrongTypedefTag &>>;
 
 template <class T>
 const auto &UnwrapIfStrongTypedef(const T &value) {
-  if constexpr (IsStrongTypedef<T> {}) {
+  if constexpr (IsStrongTypedef<T>) {
     return value.GetUnderlying();
   } else {
     return value;
@@ -134,7 +138,7 @@ using EnableIfSizeable = std::enable_if_t<std::is_void_v<Void> && meta::kIsSizab
 
 template <typename T>
 constexpr void CheckIfAllowsLogging() {
-  static_assert(IsStrongTypedef<T>::value);
+  static_assert(IsStrongTypedef<T>);
 
   if constexpr (T::kOps & StrongTypedefOps::kNonLoggable) {
     static_assert(!sizeof(T), "Trying to print a non-loggable StrongTypedef");
@@ -143,11 +147,11 @@ constexpr void CheckIfAllowsLogging() {
 
 template <class To, class... Args>
 constexpr bool IsStrongToStrongConversion() noexcept {
-  static_assert(IsStrongTypedef<To>::value);
+  static_assert(IsStrongTypedef<To>);
 
   if constexpr (sizeof...(Args) == 1) {
     using FromDecayed = std::decay_t<decltype((std::declval<Args>(), ...))>;
-    if constexpr (IsStrongTypedef<FromDecayed>::value) {
+    if constexpr (IsStrongTypedef<FromDecayed>) {
       // Required to make `MyVariant v{MySpecialInt{10}};` compile.
       return !std::is_same_v<FromDecayed, To> &&
              (std::is_same_v<typename FromDecayed::UnderlyingType, typename To::UnderlyingType> ||
@@ -164,11 +168,11 @@ using impl::strong_typedef::IsStrongTypedef;
 
 template <class Tag, class T, StrongTypedefOps Ops, class /*Enable*/>
 class StrongTypedef : public impl::strong_typedef::StrongTypedefTag {
-  static_assert(!std::is_reference<T>::value);
-  static_assert(!std::is_pointer<T>::value);
+  static_assert(!std::is_reference_v<T>);
+  static_assert(!std::is_pointer_v<T>);
 
-  static_assert(!std::is_reference<Tag>::value);
-  static_assert(!std::is_pointer<Tag>::value);
+  static_assert(!std::is_reference_v<Tag>);
+  static_assert(!std::is_pointer_v<Tag>);
 
 public:
   using UnderlyingType                   = T;
@@ -183,8 +187,9 @@ public:
 
   constexpr StrongTypedef(impl::strong_typedef::InitializerList<T> lst) : data_(lst) {}
 
-  template <typename... Args, typename = std::enable_if_t<std::is_constructible_v<T, Args...>>>
+  template <typename... Args>
   explicit constexpr StrongTypedef(Args &&...args) noexcept(noexcept(T(std::forward<Args>(args)...)))
+    requires(std::is_constructible_v<T, Args...>)
       : data_(std::forward<Args>(args)...) {
     using impl::strong_typedef::IsStrongToStrongConversion;
     static_assert(!IsStrongToStrongConversion<StrongTypedef, Args...>(),
@@ -255,26 +260,26 @@ private:
 // Relational operators
 
 // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
-#define UTILS_STRONG_TYPEDEF_REL_OP(OPERATOR)                                                                      \
-  template <class T, class U,                                                                                      \
-      std::enable_if_t<impl::strong_typedef::IsStrongTypedef<T> {} || impl::strong_typedef::IsStrongTypedef<U> {}, \
-          int> /*Enable*/                                                                                          \
-      = 0>                                                                                                         \
-  constexpr auto operator OPERATOR(const T &lhs, const U &rhs)                                                     \
-      ->decltype(impl::strong_typedef::UnwrapIfStrongTypedef(lhs)                                                  \
-              OPERATOR impl::strong_typedef::UnwrapIfStrongTypedef(rhs)) {                                         \
-    if constexpr (impl::strong_typedef::IsStrongTypedef<T> {}) {                                                   \
-      if constexpr (impl::strong_typedef::IsStrongTypedef<U> {}) {                                                 \
-        impl::strong_typedef::CheckStrongCompare<T, U>();                                                          \
-        return lhs.GetUnderlying() OPERATOR rhs.GetUnderlying();                                                   \
-      } else {                                                                                                     \
-        impl::strong_typedef::CheckTransparentCompare<T>();                                                        \
-        return lhs.GetUnderlying() OPERATOR rhs;                                                                   \
-      }                                                                                                            \
-    } else {                                                                                                       \
-      impl::strong_typedef::CheckTransparentCompare<U>();                                                          \
-      return lhs OPERATOR rhs.GetUnderlying();                                                                     \
-    }                                                                                                              \
+#define UTILS_STRONG_TYPEDEF_REL_OP(OPERATOR)                                                                \
+  template <class T, class U,                                                                                \
+      std::enable_if_t<impl::strong_typedef::IsStrongTypedef<T> || impl::strong_typedef::IsStrongTypedef<U>, \
+          int> /*Enable*/                                                                                    \
+      = 0>                                                                                                   \
+  constexpr auto operator OPERATOR(const T &lhs, const U &rhs)                                               \
+      ->decltype(impl::strong_typedef::UnwrapIfStrongTypedef(lhs)                                            \
+              OPERATOR impl::strong_typedef::UnwrapIfStrongTypedef(rhs)) {                                   \
+    if constexpr (impl::strong_typedef::IsStrongTypedef<T>) {                                                \
+      if constexpr (impl::strong_typedef::IsStrongTypedef<U>) {                                              \
+        impl::strong_typedef::CheckStrongCompare<T, U>();                                                    \
+        return lhs.GetUnderlying() OPERATOR rhs.GetUnderlying();                                             \
+      } else {                                                                                               \
+        impl::strong_typedef::CheckTransparentCompare<T>();                                                  \
+        return lhs.GetUnderlying() OPERATOR rhs;                                                             \
+      }                                                                                                      \
+    } else {                                                                                                 \
+      impl::strong_typedef::CheckTransparentCompare<U>();                                                    \
+      return lhs OPERATOR rhs.GetUnderlying();                                                               \
+    }                                                                                                        \
   }
 
 UTILS_STRONG_TYPEDEF_REL_OP(==)
@@ -298,11 +303,11 @@ std::ostream &operator<<(std::ostream &os, const StrongTypedef<Tag, T, Ops> &v) 
   return os << v.GetUnderlying();
 }
 
-template <class Tag, class T, StrongTypedefOps Ops>
-std::ostream &&operator<<(std::ostream &os, const StrongTypedef<Tag, T, Ops> &v) {
-  impl::strong_typedef::CheckIfAllowsLogging<StrongTypedef<Tag, T, Ops>>();
-  return os << v.GetUnderlying();
-}
+// template <class Tag, class T, StrongTypedefOps Ops>
+// logging::LogHelper &operator<<(logging::LogHelper &os, const StrongTypedef<Tag, T, Ops> &v) {
+//   impl::strong_typedef::CheckIfAllowsLogging<StrongTypedef<Tag, T, Ops>>();
+//   return os << v.GetUnderlying();
+// }
 
 // UnderlyingValue
 template <class Tag, class T, StrongTypedefOps Ops>
@@ -320,19 +325,24 @@ constexpr bool IsStrongTypedefLoggable(StrongTypedefOps Ops) { return !(Ops & St
 // Serialization
 
 template <typename T, typename Value>
-std::enable_if_t<formats::common::kIsFormatValue<Value> && IsStrongTypedef<T> {}, T> Parse(
-    const Value &source, formats::parse::To<T>) {
+T Parse(const Value &source, formats::parse::To<T>)
+  requires(formats::common::kIsFormatValue<Value> && IsStrongTypedef<T>)
+{
   return T {source.template As<typename T::UnderlyingType>()};
 }
 
 template <typename T, typename Value>
-std::enable_if_t<IsStrongTypedef<T> {}, Value> Serialize(const T &object, formats::serialize::To<Value>) {
+Value Serialize(const T &object, formats::serialize::To<Value>)
+  requires(IsStrongTypedef<T>)
+{
   impl::strong_typedef::CheckIfAllowsLogging<T>();
   return typename Value::Builder(object.GetUnderlying()).ExtractValue();
 }
 
 template <typename T, typename StringBuilder>
-std::enable_if_t<IsStrongTypedef<T> {}> WriteToStream(const T &object, StringBuilder &sw) {
+void WriteToStream(const T &object, StringBuilder &sw)
+  requires(IsStrongTypedef<T>)
+{
   impl::strong_typedef::CheckIfAllowsLogging<T>();
   WriteToStream(object.GetUnderlying(), sw);
 }
@@ -343,14 +353,18 @@ std::string ToString(const StrongTypedef<Tag, std::string, Ops> &object) {
   return object.GetUnderlying();
 }
 
-template <typename Tag, typename T, StrongTypedefOps Ops, std::enable_if_t<meta::kIsInteger<T>, bool> = true>
-std::string ToString(const StrongTypedef<Tag, T, Ops> &object) {
+template <typename Tag, typename T, StrongTypedefOps Ops>
+std::string ToString(const StrongTypedef<Tag, T, Ops> &object)
+  requires(meta::kIsInteger<T>)
+{
   impl::strong_typedef::CheckIfAllowsLogging<StrongTypedef<Tag, std::string, Ops>>();
   return std::to_string(object.GetUnderlying());
 }
 
-template <typename Tag, typename T, StrongTypedefOps Ops, std::enable_if_t<std::is_floating_point_v<T>, bool> = true>
-std::string ToString(const StrongTypedef<Tag, T, Ops> &object) {
+template <typename Tag, typename T, StrongTypedefOps Ops>
+std::string ToString(const StrongTypedef<Tag, T, Ops> &object)
+  requires(std::is_floating_point_v<T>)
+{
   impl::strong_typedef::CheckIfAllowsLogging<StrongTypedef<Tag, std::string, Ops>>();
   return fmt::format("{}", object.GetUnderlying());
 }
@@ -362,7 +376,7 @@ std::string ToString(const StrongTypedef<Tag, T, Ops> &object) {
 /// `utils::StrongCast<SomeStrongTydef>(another_strong_val)`
 template <typename Target, typename Tag, typename T, StrongTypedefOps Ops, typename Enable>
 constexpr Target StrongCast(const StrongTypedef<Tag, T, Ops, Enable> &src) {
-  static_assert(IsStrongTypedef<Target> {}, "Expected strong typedef as target type");
+  static_assert(IsStrongTypedef<Target>, "Expected strong typedef as target type");
   static_assert(std::is_convertible_v<T, typename Target::UnderlyingType>,
       "Source strong typedef underlying type must be convertible to "
       "target's underlying type");
@@ -371,7 +385,7 @@ constexpr Target StrongCast(const StrongTypedef<Tag, T, Ops, Enable> &src) {
 
 template <typename Target, typename Tag, typename T, StrongTypedefOps Ops, typename Enable>
 constexpr Target StrongCast(StrongTypedef<Tag, T, Ops, Enable> &&src) {
-  static_assert(IsStrongTypedef<Target> {}, "Expected strong typedef as target type");
+  static_assert(IsStrongTypedef<Target>, "Expected strong typedef as target type");
   static_assert(std::is_convertible_v<T, typename Target::UnderlyingType>,
       "Source strong typedef underlying type must be convertible to "
       "target's underlying type");
@@ -403,7 +417,7 @@ struct std::hash<utils::StrongTypedef<Tag, T, Ops>> : std::hash<T> {
 
 // fmt::format support
 template <class T, class Char>
-struct fmt::formatter<T, Char, std::enable_if_t<utils::IsStrongTypedef<T> {}>>
+struct fmt::formatter<T, Char, std::enable_if_t<utils::IsStrongTypedef<T>>>
     : fmt::formatter<typename T::UnderlyingType, Char> {
   template <typename FormatContext>
   auto format(const T &v, FormatContext &ctx) const {
