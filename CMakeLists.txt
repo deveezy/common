@@ -44,11 +44,18 @@ add_library(
 
   ${SRC_DIR}/utils/assert.cpp
   ${SRC_DIR}/utils/string_to_duration.cpp
+  ${SRC_DIR}/utils/from_string.cpp
+  ${SRC_DIR}/utils/string_to_duration.cpp
+  ${SRC_DIR}/utils/datetime.cpp
+  ${SRC_DIR}/utils/datetime/from_string_saturating.cpp
+  ${SRC_DIR}/utils/mock_now.cpp
   ${SRC_DIR}/utils/ip.cpp
+  ${SRC_DIR}/utils/macaddr.cpp
+  ${SRC_DIR}/utils/encoding/hex.cpp
 )
 
 target_include_directories(${LIB_NAME} PRIVATE ${INCLUDE_DIR})
-target_link_libraries(${LIB_NAME} PRIVATE fmt)
+target_link_libraries(${LIB_NAME} PRIVATE fmt cctz)
 
 add_executable(exe ${CMAKE_SOURCE_DIR}/exe/time_of_day_exe.cpp)
 target_link_libraries(exe PRIVATE ${LIB_NAME})
