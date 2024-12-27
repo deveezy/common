@@ -17,6 +17,7 @@ add_executable(tests
   meta_test.cpp
   underlying_value_test.cpp
   strong_typedef_test.cpp
+  ip_test.cpp
 )
 
 set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)

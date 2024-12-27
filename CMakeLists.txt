@@ -44,6 +44,7 @@ add_library(
 
   ${SRC_DIR}/utils/assert.cpp
   ${SRC_DIR}/utils/string_to_duration.cpp
+  ${SRC_DIR}/utils/ip.cpp
 )
 
 target_include_directories(${LIB_NAME} PRIVATE ${INCLUDE_DIR})
