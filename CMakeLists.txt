@@ -52,6 +52,13 @@ add_library(
   ${SRC_DIR}/utils/ip.cpp
   ${SRC_DIR}/utils/macaddr.cpp
   ${SRC_DIR}/utils/encoding/hex.cpp
+
+  ${SRC_DIR}/fs/c_file.cpp
+  ${SRC_DIR}/fs/file_descriptor.cpp
+  ${SRC_DIR}/fs/temp_file.cpp
+  ${SRC_DIR}/fs/temp_directory.cpp
+  ${SRC_DIR}/fs/read.cpp
+  ${SRC_DIR}/fs/write.cpp
 )
 
 target_include_directories(${LIB_NAME} PRIVATE ${INCLUDE_DIR})
