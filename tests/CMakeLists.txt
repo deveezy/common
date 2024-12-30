@@ -21,6 +21,7 @@ add_executable(tests
   macaddr_test.cpp
   datetime_test.cpp
   c_file_test.cpp
+  file_descriptor_test.cpp
 )
 
 set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)

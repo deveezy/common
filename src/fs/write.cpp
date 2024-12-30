@@ -5,7 +5,6 @@
 #include <system_error>
 
 #include <fmt/format.h>
-#include <boost/filesystem/operations.hpp>
 
 #include <fs/file_descriptor.hpp>
 #include <utils/assert.hpp>
@@ -17,7 +16,7 @@ namespace fs {
 
 namespace {
 
-void CreateDirectory(const char *path, boost::filesystem::perms perms) {
+void CreateDirectory(const char *path, std::filesystem::perms perms) {
   if (::mkdir(path, static_cast<::mode_t>(perms)) == -1) {
     const auto code = errno;
     if (code != EEXIST) {
@@ -29,7 +28,7 @@ void CreateDirectory(const char *path, boost::filesystem::perms perms) {
 
 }  // namespace
 
-void CreateDirectories(std::string_view path, boost::filesystem::perms perms) {
+void CreateDirectories(std::string_view path, std::filesystem::perms perms) {
   ASSERT(!path.empty());
 
   std::string mutable_path;
@@ -48,9 +47,9 @@ void CreateDirectories(std::string_view path, boost::filesystem::perms perms) {
 }
 
 void CreateDirectories(std::string_view path) {
-  using boost::filesystem::perms;
+  using std::filesystem::perms;
   const auto kPerms0755 =
-      perms::owner_all | perms::group_read | perms::group_exe | perms::others_read | perms::others_exe;
+      perms::owner_all | perms::group_read | perms::group_exec | perms::others_read | perms::others_exec;
   CreateDirectories(path, kPerms0755);
 }
 
@@ -77,9 +76,7 @@ void SyncDirectoryContents(const std::string &path) {
   std::move(fd).Close();
 }
 
-void Rename(const std::string &source, const std::string &destination) {
-  boost::filesystem::rename(source, destination);
-}
+void Rename(const std::string &source, const std::string &destination) { std::filesystem::rename(source, destination); }
 
 void RewriteFileContentsAtomically(const std::string &path, std::string_view contents, std::filesystem::perms perms) {
   const auto tmp_path = fmt::format("{}{}.tmp", path, utils::generators::GenerateUuidV4());
@@ -95,8 +92,8 @@ void RewriteFileContentsAtomically(const std::string &path, std::string_view con
   fs::SyncDirectoryContents(directory);
 }
 
-void Chmod(const std::string &path, boost::filesystem::perms perms) { boost::filesystem::permissions(path, perms); }
+void Chmod(const std::string &path, std::filesystem::perms perms) { std::filesystem::permissions(path, perms); }
 
-bool RemoveSingleFile(const std::string &path) { return boost::filesystem::remove(path); }
+bool RemoveSingleFile(const std::string &path) { return std::filesystem::remove(path); }
 
 }  // namespace fs

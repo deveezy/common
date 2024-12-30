@@ -4,10 +4,12 @@ set(CMAKE_C_COMPILER_LAUNCHER ccache)
 set(CMAKE_CXX_COMPILER_LAUNCHER ccache)
 
 set(CMAKE_CXX_STANDARD 23)
+set(LRW_CMAKE_DIR ${CMAKE_SOURCE_DIR}/cmake)
 
 include_directories("${CMAKE_SOURCE_DIR}/src")
 include_directories("${CMAKE_SOURCE_DIR}")
 
+include(${LRW_CMAKE_DIR}/SetupLTO.cmake)
 
 project(demo)
 
@@ -52,6 +54,8 @@ add_library(
   ${SRC_DIR}/utils/ip.cpp
   ${SRC_DIR}/utils/macaddr.cpp
   ${SRC_DIR}/utils/encoding/hex.cpp
+  ${SRC_DIR}/utils/uuid4.cpp
+  ${SRC_DIR}/utils/boost_uuid4.cpp
 
   ${SRC_DIR}/fs/c_file.cpp
   ${SRC_DIR}/fs/file_descriptor.cpp
