@@ -9,8 +9,9 @@
 
 #include <fs/file_descriptor.hpp>
 #include <utils/assert.hpp>
+#include <utils/uuid4.hpp>
 // #include <utils/boost_uuid4.hpp>
-// #include <utils/fast_scope_guard.hpp>
+#include <utils/fast_scope_guard.hpp>
 
 namespace fs {
 
@@ -80,12 +81,12 @@ void Rename(const std::string &source, const std::string &destination) {
   boost::filesystem::rename(source, destination);
 }
 
-void RewriteFileContentsAtomically(const std::string &path, std::string_view contents, boost::filesystem::perms perms) {
-  const auto tmp_path = fmt::format("{}{}.tmp", path, utils::generators::GenerateBoostUuid());
-  const std::filesystem::path boost_tmp_path {tmp_path};
-  const auto directory = boost_tmp_path.parent_path().string();
+void RewriteFileContentsAtomically(const std::string &path, std::string_view contents, std::filesystem::perms perms) {
+  const auto tmp_path = fmt::format("{}{}.tmp", path, utils::generators::GenerateUuidV4());
+  const std::filesystem::path tmpPath {tmp_path};
+  const auto directory = tmpPath.parent_path().string();
 
-  utils::FastScopeGuard guard {[&boost_tmp_path]() noexcept { std::filesystem::remove(boost_tmp_path); }};
+  utils::FastScopeGuard guard {[&tmpPath]() noexcept { std::filesystem::remove(tmpPath); }};
   fs::RewriteFileContentsFSync(tmp_path, contents);
   fs::Chmod(tmp_path, perms);
   fs::Rename(tmp_path, path);
