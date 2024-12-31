@@ -74,6 +74,8 @@ target_include_directories(exe PRIVATE ${INCLUDE_DIR})
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/tests)
 
+include(${LRW_CMAKE_DIR}/SetupLTO.cmake)
+
 # add_executable(${CMAKE_PROJECT_NAME}
 #   # "src/main.cpp"
 #   "src/RuwarePropDemo.cpp"
