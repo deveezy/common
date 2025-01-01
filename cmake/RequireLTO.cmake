@@ -32,7 +32,7 @@ check_include_file_cxx(string LTO_SETUP_SUCCESSFUL)
 if (NOT LTO_SETUP_SUCCESSFUL)
   message(FATAL_ERROR
       "LTO fails to compile a trivial program. See error logs for info. "
-      "Try specifying another linker via USERVER_USE_LD or changing the CMAKE_AR, "
+      "Try specifying another linker or changing the CMAKE_AR, "
       "CMAKE_RANLIB, CMAKE_EXE_LINKER_FLAGS CMAKE_SHARED_LINKER_FLAGS"
   )
 endif()

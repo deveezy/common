@@ -16,9 +16,13 @@ project(demo)
 set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
 
-set(LIB_NAME common)
+# just for fun
+set(BUILD_LIB OFF)
 
-add_library(
+if (BUILD_LIB)
+  set(LIB_NAME common)
+
+  add_library(
   ${LIB_NAME}
 
   ${INCLUDE_DIR}/fs/c_file.hpp
@@ -65,23 +69,21 @@ add_library(
   ${SRC_DIR}/fs/write.cpp
 )
 
-target_include_directories(${LIB_NAME} PRIVATE ${INCLUDE_DIR})
-target_link_libraries(${LIB_NAME} PRIVATE fmt cctz)
+  target_include_directories(${LIB_NAME} PRIVATE ${INCLUDE_DIR})
+  target_link_libraries(${LIB_NAME} PRIVATE fmt cctz)
+endif()
 
 add_executable(exe ${CMAKE_SOURCE_DIR}/exe/time_of_day_exe.cpp)
-target_link_libraries(exe PRIVATE ${LIB_NAME})
-target_include_directories(exe PRIVATE ${INCLUDE_DIR})
+if (BUILD_LIB)
+  target_link_libraries(exe PRIVATE ${LIB_NAME})
+  target_include_directories(exe PRIVATE ${INCLUDE_DIR})
 
-add_subdirectory(${CMAKE_SOURCE_DIR}/tests)
+  add_subdirectory(${CMAKE_SOURCE_DIR}/tests)
+endif()
 
 include(${LRW_CMAKE_DIR}/SetupLTO.cmake)
-
-# add_executable(${CMAKE_PROJECT_NAME}
-#   # "src/main.cpp"
-#   "src/RuwarePropDemo.cpp"
-#   # "src/leveldb_try.cpp"
-#   # "src/json_wrapper/demo.cpp"
-#   )
+include(${LRW_CMAKE_DIR}/Sanitizers.cmake)
+_lrw_make_sanitize_target()
 
 # target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -Wall -Werror -Wno-unused-function -Wno-unused-variable)
 
