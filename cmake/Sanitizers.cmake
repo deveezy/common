@@ -2,7 +2,7 @@ include_guard(GLOBAL)
 
 set_property(GLOBAL PROPERTY lrw_cmake_dir "${CMAKE_CURRENT_LIST_DIR}")
 
-function(_lrw_get_sanitize_options SANITIZER_LIST_VAR COMPILE_FLAGS_VAR LINK_FLAGS_VAR)
+function(sanitize_target TARGET_NAME)
   get_property(LRW_CMAKE_DIR GLOBAL PROPERTY lrw_cmake_dir)
 
   set(LRW_SANITIZE_ENUM "mem, addr, thread, ub")
@@ -25,6 +25,7 @@ function(_lrw_get_sanitize_options SANITIZER_LIST_VAR COMPILE_FLAGS_VAR LINK_FLA
   set(sanitize_link_flags)
   set(sanitizer_list)
 
+  message(STATUS ${LRW_SANITIZE})
   if (LRW_SANITIZE AND sanitizers_supported)
     set(sanitizer_list ${LRW_SANITIZE})
     separate_arguments(sanitizer_list)
@@ -49,7 +50,7 @@ function(_lrw_get_sanitize_options SANITIZER_LIST_VAR COMPILE_FLAGS_VAR LINK_FLA
         if (NOT CMAKE_CXX_COMPILER_ID MATCHES "Clang")
           # gcc links with ASAN dynamically by default, and that leads to all sorts of problems
           # when we intercept dl_iterate_phdr, which ASAN uses in initialization before main.
-          list(APPEND sanitize_cxx_and_link_flags -static-libasan)
+          # list(APPEND sanitize_cxx_and_link_flags -static-libasan)
         endif()
         list(APPEND sanitize_cxx_flags -fno-omit-frame-pointer)
 
@@ -68,23 +69,27 @@ function(_lrw_get_sanitize_options SANITIZER_LIST_VAR COMPILE_FLAGS_VAR LINK_FLA
     message(STATUS "Sanitizers are ON: ${LRW_SANITIZE}")
   endif()
 
-  set("${SANITIZER_LIST_VAR}" ${sanitizer_list} PARENT_SCOPE)
-  set("${COMPILE_FLAGS_VAR}" ${sanitize_cxx_flags} ${sanitize_cxx_and_link_flags} PARENT_SCOPE)
-  set("${LINK_FLAGS_VAR}" ${sanitize_link_flags} ${sanitize_cxx_and_link_flags} PARENT_SCOPE)
+  message(STATUS ${TARGET_NAME})
+  message(STATUS ${sanitize_cxx_flags})
+  message(STATUS ${sanitize_cxx_and_link_flags})
+
+  target_compile_options(${TARGET_NAME} PRIVATE ${sanitize_cxx_flags} ${sanitize_cxx_and_link_flags})
+  target_link_options(${TARGET_NAME} PRIVATE ${sanitize_link_flags} ${sanitize_cxx_and_link_flags})
+
 endfunction()
 
 
-function(_lrw_make_sanitize_target)
-  if (TARGET lrw-internal-sanitize-options)
-    return()
-  endif()
-
-  _lrw_get_sanitize_options(sanitizer_list sanitize_cxx_flags sanitize_link_flags)
-  add_library(lrw-internal-sanitize-options INTERFACE)
-  target_compile_options(lrw-internal-sanitize-options INTERFACE
-      ${sanitize_cxx_flags}
-  )
-  target_link_options(lrw-internal-sanitize-options INTERFACE
-      ${sanitize_link_flags}
-  )
-endfunction()
+# function(_lrw_make_sanitize_target)
+#   if (TARGET lrw-internal-sanitize-options)
+#     return()
+#   endif()
+#
+#   _lrw_get_sanitize_options(sanitizer_list sanitize_cxx_flags sanitize_link_flags)
+#   add_library(lrw-internal-sanitize-options INTERFACE)
+#   target_compile_options(lrw-internal-sanitize-options INTERFACE
+#       ${sanitize_cxx_flags}
+#   )
+#   target_link_options(lrw-internal-sanitize-options INTERFACE
+#       ${sanitize_link_flags}
+#   )
+# endfunction()

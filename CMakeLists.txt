@@ -9,7 +9,6 @@ set(LRW_CMAKE_DIR ${CMAKE_SOURCE_DIR}/cmake)
 include_directories("${CMAKE_SOURCE_DIR}/src")
 include_directories("${CMAKE_SOURCE_DIR}")
 
-include(${LRW_CMAKE_DIR}/SetupLTO.cmake)
 
 project(demo)
 
@@ -81,9 +80,14 @@ if (BUILD_LIB)
   add_subdirectory(${CMAKE_SOURCE_DIR}/tests)
 endif()
 
-include(${LRW_CMAKE_DIR}/SetupLTO.cmake)
+# include(${LRW_CMAKE_DIR}/SetupLTO.cmake)
 include(${LRW_CMAKE_DIR}/Sanitizers.cmake)
-_lrw_make_sanitize_target()
+
+sanitize_target(exe)
+# message(STATUS ${sanitize_cxx_flags})
+# target_compile_options(exe INTERFACE ${sanitize_cxx_flags})
+# target_link_options(exe INTERFACE ${sanitize_link_flags})
+
 
 # target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -Wall -Werror -Wno-unused-function -Wno-unused-variable)
 

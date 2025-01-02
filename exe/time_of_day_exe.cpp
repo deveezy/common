@@ -49,8 +49,10 @@ int main() {
   // std::cout << std::format("To {0:#} or not to {0:#}, that is {1:#}.\n", a2, b);
 
   const char *names[] = {"Alex", "John"};
-  std::string str     = names[2];
-  return str.length();
+  std::string str     = names[1];
+  std::cin.get();
+  names[2] = "check";
+  return 0;
 }
 
 // int main() {
