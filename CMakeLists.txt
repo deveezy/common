@@ -16,7 +16,7 @@ set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
 
 # just for fun
-set(BUILD_LIB OFF)
+set(BUILD_LIB ON)
 
 if (BUILD_LIB)
   set(LIB_NAME common)
@@ -80,13 +80,11 @@ if (BUILD_LIB)
   add_subdirectory(${CMAKE_SOURCE_DIR}/tests)
 endif()
 
-# include(${LRW_CMAKE_DIR}/SetupLTO.cmake)
+include(${LRW_CMAKE_DIR}/SetupLTO.cmake)
 include(${LRW_CMAKE_DIR}/Sanitizers.cmake)
 
 sanitize_target(exe)
-# message(STATUS ${sanitize_cxx_flags})
-# target_compile_options(exe INTERFACE ${sanitize_cxx_flags})
-# target_link_options(exe INTERFACE ${sanitize_link_flags})
+
 
 
 # target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -Wall -Werror -Wno-unused-function -Wno-unused-variable)
