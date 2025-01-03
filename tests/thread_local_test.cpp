@@ -11,7 +11,6 @@
 #include <fs/read.hpp>
 #include <fs/temp_file.hpp>
 #include <utils/rand.hpp>
-#include <utils/span.hpp>
 
 namespace {
 
