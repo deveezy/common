@@ -1,31 +1,27 @@
 #pragma once
 
-/// @file userver/formats/json/value_builder.hpp
-/// @brief @copybrief formats::json::ValueBuilder
+/// @file userver/formats/yaml/value_builder.hpp
+/// @brief @copybrief formats::yaml::ValueBuilder
 
-#include <chrono>
-#include <string_view>
-#include <vector>
-#include <formats/common/meta.hpp>
 #include <formats/common/transfer_tag.hpp>
-#include <formats/json/impl/mutable_value_wrapper.hpp>
-#include <formats/json/value.hpp>
+#include <formats/serialize/to.hpp>
+#include <formats/yaml/value.hpp>
 #include <utils/strong_typedef.hpp>
 
-namespace formats::json {
+namespace formats::yaml {
 
 // clang-format off
 
 /// @ingroup userver_universal userver_containers userver_formats
 ///
-/// @brief Builder for JSON.
+/// @brief Builder for YAML.
 ///
-/// Class provides methods for building JSON. For read only access to the
-/// existing JSON values use formats::json::Value.
+/// Class provides methods for building YAML. For read only access to the
+/// existing YAML values use formats::yaml::Value.
 ///
 /// ## Example usage:
 ///
-/// @snippet formats/json/value_builder_test.cpp  Sample formats::json::ValueBuilder usage
+/// @snippet formats/yaml/value_builder_test.cpp  Sample formats::yaml::ValueBuilder usage
 ///
 /// ## Customization example:
 ///
@@ -38,23 +34,19 @@ namespace formats::json {
 class ValueBuilder final {
 public:
   struct IterTraits {
-    using ValueType     = formats::json::ValueBuilder;
-    using Reference     = formats::json::ValueBuilder &;
-    using Pointer       = formats::json::ValueBuilder *;
-    using ContainerType = impl::MutableValueWrapper;
+    using native_iter = YAML::iterator;
+    using value_type  = formats::yaml::ValueBuilder;
+    using reference   = formats::yaml::ValueBuilder &;
+    using pointer     = formats::yaml::ValueBuilder *;
   };
 
   using iterator = Iterator<IterTraits>;
 
-  /// Constructs a ValueBuilder that holds kNull
-  ValueBuilder() = default;
+  /// Constructs a valueBuilder that holds kNull
+  ValueBuilder();
 
   /// Constructs a valueBuilder that holds default value for provided `type`.
   ValueBuilder(formats::common::Type type);
-
-  /// @brief Transfers the `ValueBuilder` object
-  /// @see formats::common::TransferTag for the transfer semantics
-  ValueBuilder(common::TransferTag, ValueBuilder &&) noexcept;
 
   ValueBuilder(const ValueBuilder &other);
   // NOLINTNEXTLINE(performance-noexcept-move-constructor)
@@ -63,8 +55,8 @@ public:
   // NOLINTNEXTLINE(performance-noexcept-move-constructor)
   ValueBuilder &operator=(ValueBuilder &&other);
 
-  ValueBuilder(const formats::json::Value &other);
-  ValueBuilder(formats::json::Value &&other);
+  ValueBuilder(const formats::yaml::Value &other);
+  ValueBuilder(formats::yaml::Value &&other);
 
   /// @name Concrete type constructors
   /// @{
@@ -76,11 +68,17 @@ public:
   ValueBuilder(std::string_view str);
   ValueBuilder(int t);
   ValueBuilder(unsigned int t);
-  ValueBuilder(uint64_t t);
-  ValueBuilder(int64_t t);
+  ValueBuilder(long t);
+  ValueBuilder(unsigned long t);
+  ValueBuilder(long long t);
+  ValueBuilder(unsigned long long t);
   ValueBuilder(float t);
   ValueBuilder(double t);
   /// @}
+
+  /// @brief Transfers the `ValueBuilder` object
+  /// @see formats::common::TransferTag for the transfer semantics
+  ValueBuilder(common::TransferTag, ValueBuilder &&) noexcept;
 
   /// Universal constructor using Serialize
   template <typename T>
@@ -88,7 +86,7 @@ public:
 
   /// @brief Access member by key for modification.
   /// @throw `TypeMismatchException` if not object or null value.
-  ValueBuilder operator[](std::string key);
+  ValueBuilder operator[](const std::string &key);
   /// @brief Access array member by index for modification.
   /// @throw `TypeMismatchException` if not an array value.
   /// @throw `OutOfBoundsException` if index is greater than size.
@@ -97,16 +95,11 @@ public:
   /// @throw `TypeMismatchException` if not object or null value.
   template <typename Tag, utils::StrongTypedefOps Ops,
       typename Enable = std::enable_if_t<utils::IsStrongTypedefLoggable(Ops)>>
-  ValueBuilder operator[](utils::StrongTypedef<Tag, std::string, Ops> key);
-
-  /// @brief Emplaces new member w/o a check whether the key already exists.
-  /// @warning May create invalid JSON with duplicate key.
-  /// @throw `TypeMismatchException` if not object or null value.
-  void EmplaceNocheck(std::string_view key, ValueBuilder value);
+  ValueBuilder operator[](const utils::StrongTypedef<Tag, std::string, Ops> &key);
 
   /// @brief Remove key from object. If key is missing nothing happens.
   /// @throw `TypeMismatchException` if value is not an object.
-  void Remove(std::string_view key);
+  void Remove(const std::string &key);
 
   iterator begin();
   iterator end();
@@ -147,11 +140,10 @@ public:
   std::size_t GetSize() const;
 
   /// @brief Returns true if value holds a `key`.
-  /// @throw `TypeMismatchException` if `*this` is not a map or null.
-  bool HasMember(std::string_view key) const;
+  bool HasMember(const char *key) const;
 
-  /// @brief Returns full path to this value.
-  std::string GetPath() const;
+  /// @brief Returns true if value holds a `key`.
+  bool HasMember(const std::string &key) const;
 
   /// @brief Resize the array value or convert null value
   /// into an array of requested size.
@@ -165,45 +157,48 @@ public:
   /// @brief Take out the resulting `Value` object.
   /// After calling this method the object is in unspecified
   /// (but valid - possibly null) state.
-  /// @throw `JsonException` if called not from the root builder.
-  formats::json::Value ExtractValue();
+  /// @throw `YamlException` if called not from the root builder.
+  formats::yaml::Value ExtractValue();
 
 private:
   class EmplaceEnabler {};
 
 public:
   /// @cond
-  ValueBuilder(EmplaceEnabler, impl::MutableValueWrapper) noexcept;
+  ValueBuilder(EmplaceEnabler, const YAML::Node &value, const formats::yaml::Path &path, const std::string &key);
+
+  ValueBuilder(EmplaceEnabler, const YAML::Node &value, const formats::yaml::Path &path, size_t index);
   /// @endcond
 
 private:
-  enum class CheckMemberExists { kYes, kNo };
+  static ValueBuilder MakeNonRoot(const YAML::Node &val, const formats::yaml::Path &path, const std::string &key);
+  static ValueBuilder MakeNonRoot(const YAML::Node &val, const formats::yaml::Path &path, size_t index);
 
-  explicit ValueBuilder(impl::MutableValueWrapper) noexcept;
-
-  static void Copy(impl::Value &to, const ValueBuilder &from);
-  static void Move(impl::Value &to, ValueBuilder &&from);
-
-  impl::Value &AddMember(std::string_view key, CheckMemberExists);
+  void Copy(const ValueBuilder &from);
+  void Move(ValueBuilder &&from);
+  void NodeDataAssign(const formats::yaml::Value &from);
 
   template <typename T>
   static Value DoSerialize(const T &t);
 
-  impl::MutableValueWrapper value_;
+  formats::yaml::Value value_;
 
-  friend class Iterator<IterTraits, common::IteratorDirection::kForward>;
-  friend class Iterator<IterTraits, common::IteratorDirection::kReverse>;
+  friend class Iterator<IterTraits>;
 };
+
+template <typename Tag, utils::StrongTypedefOps Ops, typename Enable>
+ValueBuilder ValueBuilder::operator[](const utils::StrongTypedef<Tag, std::string, Ops> &key) {
+  return (*this)[key.GetUnderlying()];
+}
 
 template <typename T>
 Value ValueBuilder::DoSerialize(const T &t) {
   static_assert(formats::common::impl::kHasSerialize<Value, T>,
-      "There is no `Serialize(const T&, formats::serialize::To<json::Value>)` "
+      "There is no `Serialize(const T&, formats::serialize::To<yaml::Value>)` "
       "in namespace of `T` or `formats::serialize`. "
       ""
       "Probably you forgot to include the "
-      "<userver/formats/serialize/common_containers.hpp> header "
-      "or one of the <formats/json/serialize_*.hpp> headers or you "
+      "<userver/formats/serialize/common_containers.hpp> or you "
       "have not provided a `Serialize` function overload.");
 
   return Serialize(t, formats::serialize::To<Value>());
@@ -211,36 +206,10 @@ Value ValueBuilder::DoSerialize(const T &t) {
 
 template <typename T>
 Value Serialize(T value, formats::serialize::To<Value>)
-  requires(std::is_integral<T>::value && sizeof(T) <= sizeof(int64_t))
+  requires(std::is_integral_v<T> && sizeof(T) <= sizeof(long long))
 {
-  using Type = std::conditional_t<std::is_signed<T>::value, int64_t, uint64_t>;
-  return json::ValueBuilder(static_cast<Type>(value)).ExtractValue();
+  using Type = std::conditional_t<std::is_signed_v<T>, long long, unsigned long long>;
+  return yaml::ValueBuilder(static_cast<Type>(value)).ExtractValue();
 }
 
-json::Value Serialize(std::chrono::system_clock::time_point tp, formats::serialize::To<Value>);
-
-template <typename Tag, utils::StrongTypedefOps Ops, typename Enable>
-ValueBuilder ValueBuilder::operator[](utils::StrongTypedef<Tag, std::string, Ops> key) {
-  return (*this)[std::move(key.GetUnderlying())];
-}
-
-/// Optimized maps of StrongTypedefs serialization for JSON
-template <typename T>
-std::enable_if_t<meta::kIsUniqueMap<T> && utils::IsStrongTypedefLoggable(T::key_type::kOps), Value> Serialize(
-    const T &value, formats::serialize::To<Value>) {
-  json::ValueBuilder builder(formats::common::Type::kObject);
-  for (const auto &[key, value] : value) { builder.EmplaceNocheck(key.GetUnderlying(), value); }
-  return builder.ExtractValue();
-}
-
-/// Optimized maps serialization for JSON
-template <typename T>
-Value Serialize(const T &value, formats::serialize::To<Value>)
-  requires(meta::kIsUniqueMap<T> && std::is_convertible_v<typename T::key_type, std::string>)
-{
-  json::ValueBuilder builder(formats::common::Type::kObject);
-  for (const auto &[key, value] : value) { builder.EmplaceNocheck(key, value); }
-  return builder.ExtractValue();
-}
-
-}  // namespace formats::json
+}  // namespace formats::yaml

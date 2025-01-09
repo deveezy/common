@@ -22,6 +22,8 @@ add_executable(tests
   datetime_test.cpp
   c_file_test.cpp
   file_descriptor_test.cpp
+  formats/common/value_test.hpp
+  formats/common/value_test.cpp
 )
 
 set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)

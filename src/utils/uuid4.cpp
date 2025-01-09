@@ -5,7 +5,7 @@
 
 namespace utils::generators {
 
-std::string GenerateUuid() {
+std::string GenerateUuidV4() {
   const auto val = GenerateBoostUuid();
   return encoding::ToHex(val.begin(), val.size());
 }

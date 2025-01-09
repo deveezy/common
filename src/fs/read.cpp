@@ -3,7 +3,7 @@
 #include <fstream>
 #include <sstream>
 
-namespace fs::blocking {
+namespace fs {
 
 std::string ReadFileContents(const std::string &path) {
   std::ifstream ifs(path);
@@ -18,4 +18,4 @@ bool FileExists(const std::string &path) { return std::filesystem::exists(path);
 
 std::filesystem::file_type GetFileType(const std::string &path) { return std::filesystem::status(path).type(); }
 
-}  // namespace fs::blocking
+}  // namespace fs
