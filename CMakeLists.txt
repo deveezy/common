@@ -38,6 +38,8 @@ add_library(
   ${INCLUDE_DIR}/utils/void_t.hpp
   ${INCLUDE_DIR}/utils/uuid4.hpp
 
+  ${INCLUDE_DIR}/compiler/thread_local.hpp
+
   ${INCLUDE_DIR}/formats/common/meta.hpp
   ${INCLUDE_DIR}/formats/common/conversion_stack.hpp
   ${INCLUDE_DIR}/formats/common/items.hpp
@@ -61,10 +63,8 @@ add_library(
   ${INCLUDE_DIR}/formats/serialize/variant.hpp
   ${INCLUDE_DIR}/formats/serialize/write_to_stream.hpp
 
-
   ${INCLUDE_DIR}/formats/json/impl/mutable_value_wrapper.hpp
   ${INCLUDE_DIR}/formats/json/impl/types.hpp
-
   ${INCLUDE_DIR}/formats/json/parser/array_parser.hpp
   ${INCLUDE_DIR}/formats/json/parser/base_parser.hpp
   ${INCLUDE_DIR}/formats/json/parser/bool_parser.hpp
@@ -79,7 +79,6 @@ add_library(
   ${INCLUDE_DIR}/formats/json/parser/string_parser.hpp
   ${INCLUDE_DIR}/formats/json/parser/typed_parser.hpp
   ${INCLUDE_DIR}/formats/json/parser/validator.hpp
-
 
   ${INCLUDE_DIR}/formats/json/exception.hpp
   ${INCLUDE_DIR}/formats/json/inline.hpp
@@ -96,10 +95,26 @@ add_library(
 
   ${INCLUDE_DIR}/formats/json.hpp
   ${INCLUDE_DIR}/formats/json_fwd.hpp
+  ${INCLUDE_DIR}/formats/yaml.hpp
+  ${INCLUDE_DIR}/formats/yaml_fwd.hpp
 
 
-  ${INCLUDE_DIR}/compiler/thread_local.hpp
+  ${INCLUDE_DIR}/formats/yaml/exception.hpp
+  ${INCLUDE_DIR}/formats/yaml/iterator.hpp
+  ${INCLUDE_DIR}/formats/yaml/serialize.hpp
+  ${INCLUDE_DIR}/formats/yaml/serialize_container.hpp
+  ${INCLUDE_DIR}/formats/yaml/types.hpp
+  ${INCLUDE_DIR}/formats/yaml/value.hpp
+  ${INCLUDE_DIR}/formats/yaml/value_builder.hpp
+  ${INCLUDE_DIR}/formats/yaml/value_fwd.hpp
 
+  ${SRC_DIR}/formats/yaml/exception.cpp
+  ${SRC_DIR}/formats/yaml/iterator.cpp
+  ${SRC_DIR}/formats/yaml/serialize.cpp
+  ${SRC_DIR}/formats/yaml/value.cpp
+  ${SRC_DIR}/formats/yaml/value_builder.cpp
+  ${SRC_DIR}/formats/yaml/exttypes.cpp
+  ${SRC_DIR}/formats/yaml/exttypes.hpp
 
   ${SRC_DIR}/formats/common/path.cpp
   ${SRC_DIR}/formats/json/exception.cpp
@@ -110,8 +125,6 @@ add_library(
   ${SRC_DIR}/formats/json/string_builder.cpp
   ${SRC_DIR}/formats/json/value.cpp
   ${SRC_DIR}/formats/json/value_builder.cpp
-
-
   ${SRC_DIR}/formats/json/impl/accept.cpp
   ${SRC_DIR}/formats/json/impl/accept.hpp
   ${SRC_DIR}/formats/json/impl/are_equal.hpp
@@ -122,14 +135,12 @@ add_library(
   ${SRC_DIR}/formats/json/impl/json_tree.cpp
   ${SRC_DIR}/formats/json/impl/types.cpp
   ${SRC_DIR}/formats/json/impl/types_impl.hpp
-
   ${SRC_DIR}/formats/json/parser/bool_parser.cpp
   ${SRC_DIR}/formats/json/parser/int_parser.cpp
   ${SRC_DIR}/formats/json/parser/parser_handler.cpp
   ${SRC_DIR}/formats/json/parser/parser_json.cpp
   ${SRC_DIR}/formats/json/parser/parser_state.cpp
   ${SRC_DIR}/formats/json/parser/string_parser.cpp
-
 
   ${SRC_DIR}/compiler/demangle.cpp
   ${SRC_DIR}/compiler/thread_local.cpp
