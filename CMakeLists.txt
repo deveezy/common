@@ -6,8 +6,6 @@ set(CMAKE_CXX_COMPILER_LAUNCHER ccache)
 set(CMAKE_CXX_STANDARD 23)
 set(LRW_CMAKE_DIR ${CMAKE_SOURCE_DIR}/cmake)
 
-
-
 project(demo)
 
 set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
@@ -20,7 +18,6 @@ set(LIB_NAME common)
 
 add_library(
   ${LIB_NAME}
-
   ${INCLUDE_DIR}/fs/c_file.hpp
   ${INCLUDE_DIR}/fs/file_descriptor.hpp
   ${INCLUDE_DIR}/fs/open_mode.hpp
@@ -28,7 +25,6 @@ add_library(
   ${INCLUDE_DIR}/fs/write.hpp
   ${INCLUDE_DIR}/fs/temp_file.hpp
   ${INCLUDE_DIR}/fs/temp_directory.hpp
-
   ${INCLUDE_DIR}/utils/datetime.hpp
   ${INCLUDE_DIR}/utils/fast_pimpl.hpp
   ${INCLUDE_DIR}/utils/flags.hpp
@@ -37,9 +33,7 @@ add_library(
   ${INCLUDE_DIR}/utils/string_to_duration.hpp
   ${INCLUDE_DIR}/utils/void_t.hpp
   ${INCLUDE_DIR}/utils/uuid4.hpp
-
   ${INCLUDE_DIR}/compiler/thread_local.hpp
-
   ${INCLUDE_DIR}/formats/common/meta.hpp
   ${INCLUDE_DIR}/formats/common/conversion_stack.hpp
   ${INCLUDE_DIR}/formats/common/items.hpp
@@ -51,18 +45,15 @@ add_library(
   ${INCLUDE_DIR}/formats/common/type.hpp
   ${INCLUDE_DIR}/formats/common/utils.hpp
   ${INCLUDE_DIR}/formats/common/validations.hpp
-
   ${INCLUDE_DIR}/formats/parse/common.hpp
   ${INCLUDE_DIR}/formats/parse/common_containers.hpp
   ${INCLUDE_DIR}/formats/parse/to.hpp
   ${INCLUDE_DIR}/formats/parse/variant.hpp
-
   ${INCLUDE_DIR}/formats/serialize/common_containers.hpp
   ${INCLUDE_DIR}/formats/serialize/time_of_day.hpp
   ${INCLUDE_DIR}/formats/serialize/to.hpp
   ${INCLUDE_DIR}/formats/serialize/variant.hpp
   ${INCLUDE_DIR}/formats/serialize/write_to_stream.hpp
-
   ${INCLUDE_DIR}/formats/json/impl/mutable_value_wrapper.hpp
   ${INCLUDE_DIR}/formats/json/impl/types.hpp
   ${INCLUDE_DIR}/formats/json/parser/array_parser.hpp
@@ -79,7 +70,6 @@ add_library(
   ${INCLUDE_DIR}/formats/json/parser/string_parser.hpp
   ${INCLUDE_DIR}/formats/json/parser/typed_parser.hpp
   ${INCLUDE_DIR}/formats/json/parser/validator.hpp
-
   ${INCLUDE_DIR}/formats/json/exception.hpp
   ${INCLUDE_DIR}/formats/json/inline.hpp
   ${INCLUDE_DIR}/formats/json/iterator.hpp
@@ -92,13 +82,10 @@ add_library(
   ${INCLUDE_DIR}/formats/json/string_builder_fwd.hpp
   ${INCLUDE_DIR}/formats/json/value.hpp
   ${INCLUDE_DIR}/formats/json/value_builder.hpp
-
   ${INCLUDE_DIR}/formats/json.hpp
   ${INCLUDE_DIR}/formats/json_fwd.hpp
   ${INCLUDE_DIR}/formats/yaml.hpp
   ${INCLUDE_DIR}/formats/yaml_fwd.hpp
-
-
   ${INCLUDE_DIR}/formats/yaml/exception.hpp
   ${INCLUDE_DIR}/formats/yaml/iterator.hpp
   ${INCLUDE_DIR}/formats/yaml/serialize.hpp
@@ -107,7 +94,6 @@ add_library(
   ${INCLUDE_DIR}/formats/yaml/value.hpp
   ${INCLUDE_DIR}/formats/yaml/value_builder.hpp
   ${INCLUDE_DIR}/formats/yaml/value_fwd.hpp
-
   ${SRC_DIR}/formats/yaml/exception.cpp
   ${SRC_DIR}/formats/yaml/iterator.cpp
   ${SRC_DIR}/formats/yaml/serialize.cpp
@@ -115,7 +101,6 @@ add_library(
   ${SRC_DIR}/formats/yaml/value_builder.cpp
   ${SRC_DIR}/formats/yaml/exttypes.cpp
   ${SRC_DIR}/formats/yaml/exttypes.hpp
-
   ${SRC_DIR}/formats/common/path.cpp
   ${SRC_DIR}/formats/json/exception.cpp
   ${SRC_DIR}/formats/json/inline.cpp
@@ -126,6 +111,7 @@ add_library(
   ${SRC_DIR}/formats/json/value.cpp
   ${SRC_DIR}/formats/json/value_builder.cpp
   ${SRC_DIR}/formats/json/impl/accept.cpp
+  ${SRC_DIR}/formats/json/impl/mutable_value_wrapper.cpp
   ${SRC_DIR}/formats/json/impl/accept.hpp
   ${SRC_DIR}/formats/json/impl/are_equal.hpp
   ${SRC_DIR}/formats/json/impl/are_equal.cpp
@@ -141,10 +127,8 @@ add_library(
   ${SRC_DIR}/formats/json/parser/parser_json.cpp
   ${SRC_DIR}/formats/json/parser/parser_state.cpp
   ${SRC_DIR}/formats/json/parser/string_parser.cpp
-
   ${SRC_DIR}/compiler/demangle.cpp
   ${SRC_DIR}/compiler/thread_local.cpp
-
   ${SRC_DIR}/utils/assert.cpp
   ${SRC_DIR}/utils/string_to_duration.cpp
   ${SRC_DIR}/utils/from_string.cpp
@@ -158,21 +142,20 @@ add_library(
   ${SRC_DIR}/utils/boost_uuid4.cpp
   ${SRC_DIR}/utils/uuid4.cpp
   ${SRC_DIR}/utils/rand.cpp
-
   ${SRC_DIR}/fs/c_file.cpp
   ${SRC_DIR}/fs/file_descriptor.cpp
   ${SRC_DIR}/fs/temp_file.cpp
   ${SRC_DIR}/fs/temp_directory.cpp
   ${SRC_DIR}/fs/read.cpp
-  ${SRC_DIR}/fs/write.cpp
+  ${SRC_DIR}/fs/write.cpp)
 
-)
-
-target_include_directories(${LIB_NAME} PRIVATE ${INCLUDE_DIR})
-target_link_libraries(${LIB_NAME} PRIVATE fmt cctz)
+target_include_directories(
+  ${LIB_NAME} PRIVATE ${INCLUDE_DIR}
+                      ${CMAKE_SOURCE_DIR}/third_party/rapidjson/include)
+target_link_libraries(${LIB_NAME} PRIVATE fmt cctz yaml-cpp)
 
 add_executable(exe ${CMAKE_SOURCE_DIR}/exe/time_of_day_exe.cpp)
-if (BUILD_LIB)
+if(BUILD_LIB)
   target_link_libraries(exe PRIVATE ${LIB_NAME})
   target_include_directories(exe PRIVATE ${INCLUDE_DIR})
 
@@ -184,8 +167,5 @@ include(${LRW_CMAKE_DIR}/Sanitizers.cmake)
 
 # sanitize_target(exe)
 
-
-
-# target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -Wall -Werror -Wno-unused-function -Wno-unused-variable)
-
-
+# target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -Wall -Werror
+# -Wno-unused-function -Wno-unused-variable)

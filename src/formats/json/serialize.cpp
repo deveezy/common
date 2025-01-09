@@ -161,7 +161,7 @@ std::string ToPrettyString(const formats::json::Value &doc, PrettyFormat format)
   return std::string {buffer.GetString(), buffer.GetLength()};
 }
 
-logging::LogHelper &operator<<(logging::LogHelper &lh, const Value &doc) {
+std::ostream &operator<<(std::ostream &lh, const Value &doc) {
   rapidjson::StringBuffer buffer;
   rapidjson::Writer writer(buffer);
   AcceptNoRecursion(doc.GetNative(), writer);

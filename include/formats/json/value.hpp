@@ -321,7 +321,7 @@ private:
   friend std::string ToStableString(const formats::json::Value &);
   friend std::string ToStableString(formats::json::Value &&);
   friend std::string ToPrettyString(const formats::json::Value &doc, PrettyFormat format);
-  friend logging::LogHelper &operator<<(logging::LogHelper &, const Value &);
+  friend std::ostream &operator<<(std::ostream &, const Value &);
 };
 
 template <typename T>
