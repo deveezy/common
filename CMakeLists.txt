@@ -33,6 +33,7 @@ add_library(
   ${INCLUDE_DIR}/utils/string_to_duration.hpp
   ${INCLUDE_DIR}/utils/void_t.hpp
   ${INCLUDE_DIR}/utils/uuid4.hpp
+  ${INCLUDE_DIR}/utils/traceful_exception.hpp
   ${INCLUDE_DIR}/compiler/thread_local.hpp
   ${INCLUDE_DIR}/formats/common/meta.hpp
   ${INCLUDE_DIR}/formats/common/conversion_stack.hpp
@@ -131,6 +132,7 @@ add_library(
   ${SRC_DIR}/formats/json/parser/string_parser.cpp
   ${SRC_DIR}/compiler/demangle.cpp
   ${SRC_DIR}/compiler/thread_local.cpp
+  ${SRC_DIR}/utils/traceful_exception.cpp
   ${SRC_DIR}/utils/assert.cpp
   ${SRC_DIR}/utils/string_to_duration.cpp
   ${SRC_DIR}/utils/from_string.cpp

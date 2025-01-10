@@ -1,14 +1,14 @@
 #pragma once
 
 /// @file userver/utils/assert.hpp
-/// @brief Assertion macros UASSERT, UASSERT_MSG, UINVARIANT
+/// @brief Assertion macros ASSERT, ASSERT_MSG, INVARIANT
 /// @ingroup userver_universal
 
 #include <string_view>
 
 namespace utils::impl {
 
-[[noreturn]] void UASSERT_failed(
+[[noreturn]] void ASSERT_failed(
     std::string_view expr, const char *file, unsigned int line, const char *function, std::string_view msg) noexcept;
 
 [[noreturn]] void LogAndThrowInvariantError(std::string_view condition, std::string_view message);
@@ -30,14 +30,14 @@ extern bool dump_stacktrace_on_assert_failure;
 ///
 /// @hideinitializer
 // NOLINTNEXTLINE (cppcoreguidelines-macro-usage)
-#define ASSERT_MSG(expr, msg)                                                  \
-  do {                                                                         \
-    if (utils::impl::kEnableAssert) {                                          \
-      if (expr) {                                                              \
-      } else {                                                                 \
-        utils::impl::UASSERT_failed(#expr, __FILE__, __LINE__, __func__, msg); \
-      }                                                                        \
-    }                                                                          \
+#define ASSERT_MSG(expr, msg)                                                 \
+  do {                                                                        \
+    if (utils::impl::kEnableAssert) {                                         \
+      if (expr) {                                                             \
+      } else {                                                                \
+        utils::impl::ASSERT_failed(#expr, __FILE__, __LINE__, __func__, msg); \
+      }                                                                       \
+    }                                                                         \
   } while (0)
 
 /// @brief Assertion macro that aborts execution in DEBUG builds and does
@@ -51,14 +51,14 @@ extern bool dump_stacktrace_on_assert_failure;
 ///
 /// @hideinitializer
 // NOLINTNEXTLINE (cppcoreguidelines-macro-usage)
-#define INVARIANT(condition, message)                                                   \
-  do {                                                                                  \
-    if (condition) {                                                                    \
-    } else {                                                                            \
-      if constexpr (utils::impl::kEnableAssert) {                                       \
-        utils::impl::UASSERT_failed(#condition, __FILE__, __LINE__, __func__, message); \
-      } else {                                                                          \
-        utils::impl::LogAndThrowInvariantError(#condition, message);                    \
-      }                                                                                 \
-    }                                                                                   \
+#define INVARIANT(condition, message)                                                  \
+  do {                                                                                 \
+    if (condition) {                                                                   \
+    } else {                                                                           \
+      if constexpr (utils::impl::kEnableAssert) {                                      \
+        utils::impl::ASSERT_failed(#condition, __FILE__, __LINE__, __func__, message); \
+      } else {                                                                         \
+        utils::impl::LogAndThrowInvariantError(#condition, message);                   \
+      }                                                                                \
+    }                                                                                  \
   } while (0)
