@@ -102,6 +102,7 @@ add_library(
   ${SRC_DIR}/formats/yaml/exttypes.cpp
   ${SRC_DIR}/formats/yaml/exttypes.hpp
   ${SRC_DIR}/formats/common/path.cpp
+  ${SRC_DIR}/formats/common/utils.cpp
   ${SRC_DIR}/formats/json/exception.cpp
   ${SRC_DIR}/formats/json/inline.cpp
   ${SRC_DIR}/formats/json/iterator.cpp

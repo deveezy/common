@@ -75,7 +75,7 @@ private:
 }  // namespace formats::json
 
 template <>
-struct std::formatter<formats::json::Value> : fmt::formatter<std::string_view> {
+struct fmt::formatter<formats::json::Value> : fmt::formatter<std::string_view> {
   constexpr static auto parse(format_parse_context &ctx) -> decltype(ctx.begin()) { return ctx.begin(); }
 
   template <typename FormatContext>

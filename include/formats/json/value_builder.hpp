@@ -226,8 +226,9 @@ ValueBuilder ValueBuilder::operator[](utils::StrongTypedef<Tag, std::string, Ops
 
 /// Optimized maps of StrongTypedefs serialization for JSON
 template <typename T>
-std::enable_if_t<meta::kIsUniqueMap<T> && utils::IsStrongTypedefLoggable(T::key_type::kOps), Value> Serialize(
-    const T &value, formats::serialize::To<Value>) {
+Value Serialize(const T &value, formats::serialize::To<Value>)
+  requires(meta::kIsUniqueMap<T> && utils::IsStrongTypedefLoggable(T::key_type::kOps))
+{
   json::ValueBuilder builder(formats::common::Type::kObject);
   for (const auto &[key, value] : value) { builder.EmplaceNocheck(key.GetUnderlying(), value); }
   return builder.ExtractValue();
