@@ -2,6 +2,7 @@
 #include <gtest/gtest.h>
 
 #include <limits>
+#include <formats/common/type.hpp>
 
 template <class T>
 struct MemberModify : public ::testing::Test {};

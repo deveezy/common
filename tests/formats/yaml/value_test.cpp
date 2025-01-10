@@ -2,7 +2,8 @@
 #include <formats/yaml/serialize_container.hpp>
 #include <formats/yaml/value.hpp>
 #include <formats/yaml/value_builder.hpp>
-#include <utest/literals.hpp>
+
+using namespace ::formats::literals;
 
 #include <gmock/gmock-matchers.h>
 

@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <unordered_set>
+#include <formats/common/items.hpp>
 
 template <class T>
 struct MemberAccess : public ::testing::Test {};

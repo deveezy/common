@@ -5,9 +5,10 @@
 #include <formats/json/serialize_container.hpp>
 #include <formats/json/value.hpp>
 #include <formats/json/value_builder.hpp>
-#include <utest/literals.hpp>
+// #include <utest/literals.hpp>
 
 #include "../common/value_test.hpp"
+using namespace ::formats::literals;
 
 template <>
 struct Parsing<formats::json::Value> : public ::testing::Test {

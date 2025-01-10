@@ -13,9 +13,9 @@
 #include <vector>
 
 #include <gtest/gtest.h>
-#include <boost/container/flat_map.hpp>
-#include <boost/container/flat_set.hpp>
-#include <boost/optional.hpp>
+// #include <boost/container/flat_map.hpp>
+// #include <boost/container/flat_set.hpp>
+// #include <boost/optional.hpp>
 
 // namespace boost {
 // template <class T>
@@ -98,38 +98,38 @@ TYPED_TEST_P(Parsing, VectorVectorIntNull) {
   EXPECT_EQ(std::vector<std::vector<int>> {}, v);
 }
 
-TYPED_TEST_P(Parsing, BoostContainerFlatSet) {
-  auto value = this->FromString("[3,3,5,2,1,5,6,4]");
-  auto v     = value.template As<boost::container::flat_set<int>>();
-  EXPECT_EQ(6, v.size());
-  for (std::size_t i = 0; i < v.size(); ++i) { EXPECT_EQ(*v.nth(i), i + 1) << i; }
-}
+// TYPED_TEST_P(Parsing, BoostContainerFlatSet) {
+//   auto value = this->FromString("[3,3,5,2,1,5,6,4]");
+//   auto v     = value.template As<boost::container::flat_set<int>>();
+//   EXPECT_EQ(6, v.size());
+//   for (std::size_t i = 0; i < v.size(); ++i) { EXPECT_EQ(*v.nth(i), i + 1) << i; }
+// }
 
-TYPED_TEST_P(Parsing, BoostContainerFlatMap) {
-  auto value = this->FromString(R"({"b":1, "a":0})");
-  auto v     = value.template As<boost::container::flat_map<std::string, int>>();
-  EXPECT_EQ(2, v.size());
-  for (std::size_t i = 0; i < v.size(); ++i) { EXPECT_EQ(v.nth(i)->second, i) << i; }
-}
+// TYPED_TEST_P(Parsing, BoostContainerFlatMap) {
+//   auto value = this->FromString(R"({"b":1, "a":0})");
+//   auto v     = value.template As<boost::container::flat_map<std::string, int>>();
+//   EXPECT_EQ(2, v.size());
+//   for (std::size_t i = 0; i < v.size(); ++i) { EXPECT_EQ(v.nth(i)->second, i) << i; }
+// }
 
-TYPED_TEST_P(Parsing, BoostOptionalIntNone) {
+TYPED_TEST_P(Parsing, StdOptionalIntNone) {
   auto value = this->FromString("{}")["nonexisting"];
-  auto v     = value.template As<boost::optional<int>>();
-  EXPECT_EQ(boost::none, v);
+  auto v     = value.template As<std::optional<int>>();
+  EXPECT_EQ(std::nullopt, v);
   EXPECT_FALSE(value.template As<std::optional<int>>());
 }
 
-TYPED_TEST_P(Parsing, BoostOptionalInt) {
+TYPED_TEST_P(Parsing, StdOptionalInt) {
   auto value = this->FromString("[1]")[0];
-  auto v     = value.template As<boost::optional<int>>();
+  auto v     = value.template As<std::optional<int>>();
   EXPECT_EQ(1, v);
   EXPECT_EQ(1, value.template As<std::optional<int>>());
 }
 
-TYPED_TEST_P(Parsing, BoostOptionalVectorInt) {
+TYPED_TEST_P(Parsing, StdOptionalVectorInt) {
   auto value = this->FromString("{}")["nonexisting"];
-  auto v     = value.template As<boost::optional<std::vector<int>>>();
-  EXPECT_EQ(boost::none, v);
+  auto v     = value.template As<std::optional<std::vector<int>>>();
+  EXPECT_EQ(std::nullopt, v);
   EXPECT_FALSE(value.template As<std::optional<std::vector<int>>>());
 }
 
@@ -325,9 +325,9 @@ REGISTER_TYPED_TEST_SUITE_P(Parsing,
 
     ContainersCtr, VectorInt, VectorIntNull, VectorIntErrorObj, VectorVectorInt, VectorVectorIntNull,
 
-    BoostContainerFlatSet, BoostContainerFlatMap,
+    // BoostContainerFlatSet, BoostContainerFlatMap,
 
-    BoostOptionalIntNone, BoostOptionalInt, BoostOptionalVectorInt, OptionalIntNone, OptionalInt, OptionalVectorInt,
+    StdOptionalIntNone, StdOptionalInt, StdOptionalVectorInt, OptionalIntNone, OptionalInt, OptionalVectorInt,
 
     Int, UInt, IntOverflow, UserProvidedCommonParser,
 

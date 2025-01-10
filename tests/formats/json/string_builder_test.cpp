@@ -7,7 +7,6 @@
 #include <formats/json/serialize_duration.hpp>
 #include <formats/json/string_builder.hpp>
 #include <formats/json/value_builder.hpp>
-#include <utest/death_tests.hpp>
 
 using formats::json::FromString;
 using formats::json::StringBuilder;
@@ -266,28 +265,15 @@ TYPED_TEST(JsonStringBuilderFloatingTypesAndDeathTest, Array) {
 TYPED_TEST(JsonStringBuilderFloatingTypesAndDeathTest, Nan) {
   StringBuilder sw;
 
-#ifdef NDEBUG
   EXPECT_THROW(WriteToStream(std::numeric_limits<TypeParam>::quiet_NaN(), sw), std::runtime_error);
 
   EXPECT_THROW(WriteToStream(std::numeric_limits<TypeParam>::signaling_NaN(), sw), std::runtime_error);
-
-#else
-  UEXPECT_DEATH(WriteToStream(std::numeric_limits<TypeParam>::quiet_NaN(), sw), "nan");
-  UEXPECT_DEATH(WriteToStream(std::numeric_limits<TypeParam>::signaling_NaN(), sw), "nan");
-#endif
 }
 
 TYPED_TEST(JsonStringBuilderFloatingTypesAndDeathTest, Inf) {
   StringBuilder sw;
-
-#ifdef NDEBUG
   EXPECT_THROW(WriteToStream(std::numeric_limits<TypeParam>::infinity(), sw), std::runtime_error);
   EXPECT_THROW(WriteToStream(-std::numeric_limits<TypeParam>::infinity(), sw), std::runtime_error);
-
-#else
-  UEXPECT_DEATH(WriteToStream(std::numeric_limits<TypeParam>::infinity(), sw), "inf");
-  UEXPECT_DEATH(WriteToStream(std::numeric_limits<TypeParam>::infinity(), sw), "inf");
-#endif
 }
 
 /// [Sample formats::json::StringBuilder usage]

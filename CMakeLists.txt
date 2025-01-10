@@ -49,6 +49,7 @@ add_library(
   ${INCLUDE_DIR}/formats/parse/common_containers.hpp
   ${INCLUDE_DIR}/formats/parse/to.hpp
   ${INCLUDE_DIR}/formats/parse/variant.hpp
+  ${INCLUDE_DIR}/formats/parse/optional.hpp
   ${INCLUDE_DIR}/formats/serialize/common_containers.hpp
   ${INCLUDE_DIR}/formats/serialize/time_of_day.hpp
   ${INCLUDE_DIR}/formats/serialize/to.hpp
