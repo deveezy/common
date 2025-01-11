@@ -23,6 +23,9 @@ TYPED_TEST_SUITE_P(CommonValueBuilderTests);
 template <typename Float, typename ValueBuilder, typename Exception>
 inline void TestNanInfInstantiation() {
   // In debug builds we UASSERT for Nan/Inf
+
+#ifdef NDEBUG
+
   ASSERT_THROW(ValueBuilder {std::numeric_limits<Float>::signaling_NaN()}, Exception)
       << "Assertion failed for type " << compiler::GetTypeName<Float>();
   ASSERT_THROW(ValueBuilder {std::numeric_limits<Float>::quiet_NaN()}, Exception)
@@ -31,14 +34,14 @@ inline void TestNanInfInstantiation() {
       << "Assertion failed for type " << compiler::GetTypeName<Float>();
   ASSERT_THROW(ValueBuilder {-std::numeric_limits<Float>::infinity()}, Exception)
       << "Assertion failed for type " << compiler::GetTypeName<Float>();
-#if 0
-  UEXPECT_DEATH(ValueBuilder {std::numeric_limits<Float>::signaling_NaN()}, "")
+#else
+  EXPECT_DEATH(ValueBuilder {std::numeric_limits<Float>::signaling_NaN()}, "")
       << "Assertion failed for type " << compiler::GetTypeName<Float>();
-  UEXPECT_DEATH(ValueBuilder {std::numeric_limits<Float>::quiet_NaN()}, "")
+  EXPECT_DEATH(ValueBuilder {std::numeric_limits<Float>::quiet_NaN()}, "")
       << "Assertion failed for type " << compiler::GetTypeName<Float>();
-  UEXPECT_DEATH(ValueBuilder {std::numeric_limits<Float>::infinity()}, "")
+  EXPECT_DEATH(ValueBuilder {std::numeric_limits<Float>::infinity()}, "")
       << "Assertion failed for type " << compiler::GetTypeName<Float>();
-  UEXPECT_DEATH(ValueBuilder {-std::numeric_limits<Float>::infinity()}, "")
+  EXPECT_DEATH(ValueBuilder {-std::numeric_limits<Float>::infinity()}, "")
       << "Assertion failed for type " << compiler::GetTypeName<Float>();
 #endif
 }
