@@ -84,3 +84,14 @@ struct fmt::formatter<formats::json::Value> : fmt::formatter<std::string_view> {
     return fmt::formatter<string_view>::format(buffer.GetStringView(), ctx);
   }
 };
+
+template <>
+struct std::formatter<formats::json::Value> : std::formatter<std::string_view> {
+  constexpr static auto parse(format_parse_context &ctx) -> decltype(ctx.begin()) { return ctx.begin(); }
+
+  template <typename FormatContext>
+  auto format(const formats::json::Value &value, FormatContext &ctx) const -> decltype(ctx.out()) {
+    const formats::json::impl::StringBuffer buffer(value);
+    return std::formatter<string_view>::format(buffer.GetStringView(), ctx);
+  }
+};

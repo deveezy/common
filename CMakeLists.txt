@@ -159,12 +159,10 @@ target_include_directories(
 target_link_libraries(${LIB_NAME} PRIVATE fmt cctz yaml-cpp)
 
 add_executable(exe ${CMAKE_SOURCE_DIR}/exe/time_of_day_exe.cpp)
-if(BUILD_LIB)
-  target_link_libraries(exe PRIVATE ${LIB_NAME})
-  target_include_directories(exe PRIVATE ${INCLUDE_DIR})
+target_link_libraries(exe PRIVATE ${LIB_NAME})
+target_include_directories(exe PRIVATE ${INCLUDE_DIR})
 
-  add_subdirectory(${CMAKE_SOURCE_DIR}/tests)
-endif()
+add_subdirectory(${CMAKE_SOURCE_DIR}/tests)
 
 include(${LRW_CMAKE_DIR}/SetupLTO.cmake)
 include(${LRW_CMAKE_DIR}/Sanitizers.cmake)

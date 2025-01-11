@@ -8,7 +8,37 @@
 #include <sstream>
 #include <string_view>
 
+#include <formats/json/value.hpp>
+#include <formats/parse/common_containers.hpp>
+#include <formats/serialize/common_containers.hpp>
+#include "formats/json/serialize.hpp"
+#include "formats/json/value_builder.hpp"
 struct QuotableString : std::string_view {};
+
+struct CustomValue {
+  std::string field1;
+  int field2;
+  std::vector<int> arr;
+};
+
+//  The function must be declared in the namespace of your type
+CustomValue Parse(const formats::json::Value &json, formats::parse::To<CustomValue>) {
+  return CustomValue {
+      .field1 = json["field1"].As<std::string>(""),
+      .field2 = json["field2"].As<int>(1),             // return `1` if "field2" is missing
+      .arr    = json["arr"].As<std::vector<int>>({}),  // return `1` if "field2" is missing
+  };
+}
+
+// The function must be declared in the namespace of your type
+formats::json::Value Serialize(const CustomValue &data, formats::serialize::To<formats::json::Value>) {
+  formats::json::Value::Builder builder;
+  builder["field1"] = data.field1;
+  builder["field2"] = data.field2;
+  builder["arr"]    = data.arr;
+
+  return builder.ExtractValue();
+}
 
 // template <>
 // struct std::formatter<QuotableString, char> {
@@ -42,16 +72,47 @@ struct QuotableString : std::string_view {};
 // };
 
 int main() {
-  // QuotableString a("be"), a2(R"( " be " )");
-  // QuotableString b("a question");
-  // std::cout << std::format("To {0} or not to {0}, that is {1}.\n", a, b);
-  // std::cout << std::format("To {0:} or not to {0:}, that is {1:}.\n", a, b);
-  // std::cout << std::format("To {0:#} or not to {0:#}, that is {1:#}.\n", a2, b);
+  formats::json::Value json = formats::json::FromString(R"(
+{
+  "store": {
+    "array": [1, 2, 3, 4],
+    "book": [
+      {
+        "category": "fiction",
+        "title": "The Great Gatsby",
+        "price": 10.99
+      },
+      {
+        "category": "non-fiction",
+        "title": "Sapiens",
+        "price": 12.99
+      }
+    ],
+    "bicycle": {
+      "color": "red",
+      "price": 19.95
+    }
+  }
+})");
 
-  const char *names[] = {"Alex", "John"};
-  std::string str     = names[1];
-  std::cin.get();
-  names[2] = "check";
+  // const auto key1 = json["key1"].As<int>();
+  // json["key1"]    = 10;
+
+  // const auto &key3 = json["key2"]["key3"].As<std::string>();
+  std::cout << json["store"]["array"].IsArray() << std::endl;
+  const auto arr = json["store"]["array"];
+  const auto vec = arr.As<std::vector<int>>();
+  std::cout << vec.size() << std::endl;
+  CustomValue cust {.field1 = "string", .field2 = 10, .arr = {1, 2, 3, 4}};
+
+  formats::json::ValueBuilder builderJson;
+  builderJson["example"] = cust;
+  auto json2             = builderJson.ExtractValue();
+  const auto ret         = json2.As<CustomValue>();
+  formats::json::ToStableString();
+  // std::cout << formats::json::ToString(json2) << std::endl;
+  std::cout << std::format("{}", json);
+
   return 0;
 }
 
