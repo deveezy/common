@@ -12,7 +12,6 @@ set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
 
 # just for fun
-set(BUILD_LIB ON)
 
 set(LIB_NAME common)
 
@@ -164,17 +163,6 @@ target_include_directories(
   exe PRIVATE ${INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/external/date/include)
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/tests)
-if(NOT TARGET date)
-  if(NOT EXISTS "${CMAKE_SOURCE_DIR}/external/date")
-    message(
-      FATAL_ERROR
-        "date submodule is missing. Please run 'git submodule update --init'.")
-  else()
-    add_subdirectory("${CMAKE_SOURCE_DIR}/external/date"
-                     ${CMAKE_BINARY_DIR}/external/date)
-  endif()
-
-endif()
 
 include(${LRW_CMAKE_DIR}/SetupLTO.cmake)
 include(${LRW_CMAKE_DIR}/Sanitizers.cmake)
