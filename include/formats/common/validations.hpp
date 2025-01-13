@@ -1,6 +1,5 @@
 #pragma once
 
-/// @file universal/include/userver/formats/common/validations.hpp
 /// @brief @copybrief formats::common::ValidateFloat()
 
 #include <cmath>

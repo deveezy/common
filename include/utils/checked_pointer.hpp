@@ -1,6 +1,5 @@
 #pragma once
 
-/// @file userver/utils/checked_pointer.hpp
 /// @brief @copybrief utils::CheckedPtr
 
 #include <cstdlib>
@@ -10,7 +9,6 @@
 
 namespace utils {
 
-/// @ingroup userver_universal userver_containers
 ///
 /// @brief Utility template for returning a pointer to an object that
 /// is owned by someone else; throws std::runtime_error if nullptr is stored

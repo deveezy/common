@@ -1,4 +1,5 @@
 // #include <utils/time_of_day.hpp>
+#include <cctz/time_zone.h>
 #include <iostream>
 
 #include <algorithm>
@@ -13,6 +14,7 @@
 #include <formats/serialize/common_containers.hpp>
 #include "formats/json/serialize.hpp"
 #include "formats/json/value_builder.hpp"
+#include "utils/datetime.hpp"
 struct QuotableString : std::string_view {};
 
 struct CustomValue {
@@ -71,6 +73,7 @@ formats::json::Value Serialize(const CustomValue &data, formats::serialize::To<f
 //   }
 // };
 
+#if 0
 int main() {
   formats::json::Value json = formats::json::FromString(R"(
 {
@@ -99,20 +102,40 @@ int main() {
   // json["key1"]    = 10;
 
   // const auto &key3 = json["key2"]["key3"].As<std::string>();
-  std::cout << json["store"]["array"].IsArray() << std::endl;
-  const auto arr = json["store"]["array"];
-  const auto vec = arr.As<std::vector<int>>();
-  std::cout << vec.size() << std::endl;
-  CustomValue cust {.field1 = "string", .field2 = 10, .arr = {1, 2, 3, 4}};
+  // std::cout << json["store"]["array"].IsArray() << std::endl;
+  // const auto arr = json["store"]["array"];
+  // const auto vec = arr.As<std::vector<int>>();
+  // std::cout << vec.size() << std::endl;
+  // CustomValue cust {.field1 = "string", .field2 = 10, .arr = {1, 2, 3, 4}};
+  //
+  // formats::json::ValueBuilder builderJson;
+  // builderJson["example"] = cust;
+  // auto json2             = builderJson.ExtractValue();
+  // const auto ret         = json2.As<CustomValue>();
+  // // std::cout << formats::json::ToString(json2) << std::endl;
+  // std::cout << std::format("{}", json);
 
-  formats::json::ValueBuilder builderJson;
-  builderJson["example"] = cust;
-  auto json2             = builderJson.ExtractValue();
-  const auto ret         = json2.As<CustomValue>();
-  formats::json::ToStableString();
-  // std::cout << formats::json::ToString(json2) << std::endl;
-  std::cout << std::format("{}", json);
+  return 0;
+}
+#endif
 
+#include <date/tz.h>
+#include <iostream>
+#include <chrono>
+#include <boost/date_time/local_time/local_time.hpp>
+
+int main() {
+  // using namespace boost::local_time;
+  // using namespace boost::posix_time;
+  //
+  // // Создаем POSIX-таймзону
+  // time_zone_ptr posix_zone(new posix_time_zone("EST5EDT,M3.2.0/02:00,M11.1.0/02:00"));
+  //
+  // // Получаем текущее локальное время в этой зоне
+  // local_date_time ldt(second_clock::local_time(), posix_zone);
+  // std::cout << "Current time in POSIX zone: " << ldt << std::endl;
+  std::cout << utils::datetime::TimestampToString(utils::datetime::Timestamp()) << std::endl;
+  std::cout << utils::datetime::LocalTimezoneTimestring(utils::datetime::Timestamp()) << std::endl;
   return 0;
 }
 

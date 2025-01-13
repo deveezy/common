@@ -25,7 +25,7 @@ void RemoveDirectory(const std::string &path) {
 
 }  // namespace
 
-TempDirectory TempDirectory::Create() { return Create(std::filesystem::temp_directory_path().string(), "userver-"); }
+TempDirectory TempDirectory::Create() { return Create(std::filesystem::temp_directory_path().string(), "lrw-"); }
 
 TempDirectory TempDirectory::Create(std::string_view parent_path, std::string_view name_prefix) {
   CreateDirectories(parent_path, std::filesystem::perms::owner_all);

@@ -1,6 +1,5 @@
 #pragma once
 
-/// @file userver/formats/yaml/value_builder.hpp
 /// @brief @copybrief formats::yaml::ValueBuilder
 
 #include <formats/common/transfer_tag.hpp>
@@ -12,7 +11,6 @@ namespace formats::yaml {
 
 // clang-format off
 
-/// @ingroup userver_universal userver_containers userver_formats
 ///
 /// @brief Builder for YAML.
 ///
@@ -27,7 +25,6 @@ namespace formats::yaml {
 ///
 /// @snippet formats/json/value_builder_test.cpp  Sample Customization formats::json::ValueBuilder usage
 ///
-/// @see @ref scripts/docs/en/userver/formats.md
 
 // clang-format on
 
@@ -198,7 +195,7 @@ Value ValueBuilder::DoSerialize(const T &t) {
       "in namespace of `T` or `formats::serialize`. "
       ""
       "Probably you forgot to include the "
-      "<userver/formats/serialize/common_containers.hpp> or you "
+      "<formats/serialize/common_containers.hpp> or you "
       "have not provided a `Serialize` function overload.");
 
   return Serialize(t, formats::serialize::To<Value>());

@@ -1,8 +1,6 @@
 #pragma once
 
-/// @file userver/formats/serialize/variant.hpp
 /// @brief Serializers for std::variant
-/// @ingroup userver_universal userver_formats_serialize
 
 #include <variant>
 

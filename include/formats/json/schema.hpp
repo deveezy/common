@@ -1,6 +1,5 @@
 #pragma once
 
-/// @file userver/formats/json/schema.hpp
 /// @brief JSON schema validator
 
 #include <string>

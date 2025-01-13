@@ -1,8 +1,6 @@
 #pragma once
 
-/// @file userver/utils/rand.hpp
 /// @brief Random number generators
-/// @ingroup userver_universal
 
 #include <algorithm>
 #include <cstdint>

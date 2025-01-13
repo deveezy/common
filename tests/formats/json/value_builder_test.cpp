@@ -21,7 +21,7 @@ INSTANTIATE_TYPED_TEST_SUITE_P(FormatsJson, CommonValueBuilderTests, formats::js
 
 TEST(JsonValueBuilder, ExampleUsage) {
   /// [Sample formats::json::ValueBuilder usage]
-  // #include <userver/formats/json.hpp>
+  // #include <formats/json.hpp>
   formats::json::ValueBuilder builder;
   builder["key1"]           = 1;
   builder["key2"]["key3"]   = "val";

@@ -1,8 +1,6 @@
 #pragma once
 
-/// @file userver/utils/from_string.hpp
 /// @brief @copybrief utils::FromString
-/// @ingroup userver_universal
 
 #include <cctype>
 #include <cerrno>

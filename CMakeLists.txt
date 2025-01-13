@@ -79,7 +79,6 @@ add_library(
   ${INCLUDE_DIR}/formats/json/serialize.hpp
   ${INCLUDE_DIR}/formats/json/serialize_container.hpp
   ${INCLUDE_DIR}/formats/json/serialize_duration.hpp
-  ${INCLUDE_DIR}/formats/json/serialize_variant.hpp
   ${INCLUDE_DIR}/formats/json/string_builder.hpp
   ${INCLUDE_DIR}/formats/json/string_builder_fwd.hpp
   ${INCLUDE_DIR}/formats/json/value.hpp
@@ -158,11 +157,24 @@ target_include_directories(
                       ${CMAKE_SOURCE_DIR}/third_party/rapidjson/include)
 target_link_libraries(${LIB_NAME} PRIVATE fmt cctz yaml-cpp)
 
-add_executable(exe ${CMAKE_SOURCE_DIR}/exe/time_of_day_exe.cpp)
-target_link_libraries(exe PRIVATE ${LIB_NAME})
-target_include_directories(exe PRIVATE ${INCLUDE_DIR})
+add_executable(exe ${CMAKE_SOURCE_DIR}/exe/time_of_day_exe.cpp
+                   ${CMAKE_SOURCE_DIR}/external/date/src/tz.cpp)
+target_link_libraries(exe PRIVATE ${LIB_NAME} date curl)
+target_include_directories(
+  exe PRIVATE ${INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/external/date/include)
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/tests)
+if(NOT TARGET date)
+  if(NOT EXISTS "${CMAKE_SOURCE_DIR}/external/date")
+    message(
+      FATAL_ERROR
+        "date submodule is missing. Please run 'git submodule update --init'.")
+  else()
+    add_subdirectory("${CMAKE_SOURCE_DIR}/external/date"
+                     ${CMAKE_BINARY_DIR}/external/date)
+  endif()
+
+endif()
 
 include(${LRW_CMAKE_DIR}/SetupLTO.cmake)
 include(${LRW_CMAKE_DIR}/Sanitizers.cmake)

@@ -1,6 +1,5 @@
 #pragma once
 
-/// @file userver/formats/json/value_builder.hpp
 /// @brief @copybrief formats::json::ValueBuilder
 
 #include <chrono>
@@ -16,7 +15,6 @@ namespace formats::json {
 
 // clang-format off
 
-/// @ingroup userver_universal userver_containers userver_formats
 ///
 /// @brief Builder for JSON.
 ///
@@ -31,7 +29,6 @@ namespace formats::json {
 ///
 /// @snippet formats/json/value_builder_test.cpp  Sample Customization formats::json::ValueBuilder usage
 ///
-/// @see @ref scripts/docs/en/userver/formats.md
 
 // clang-format on
 
@@ -202,7 +199,7 @@ Value ValueBuilder::DoSerialize(const T &t) {
       "in namespace of `T` or `formats::serialize`. "
       ""
       "Probably you forgot to include the "
-      "<userver/formats/serialize/common_containers.hpp> header "
+      "<formats/serialize/common_containers.hpp> header "
       "or one of the <formats/json/serialize_*.hpp> headers or you "
       "have not provided a `Serialize` function overload.");
 

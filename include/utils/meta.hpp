@@ -1,8 +1,6 @@
 #pragma once
 
-/// @file userver/utils/meta.hpp
 /// @brief Metaprogramming, template variables and concepts
-/// @ingroup userver_universal
 
 #include <iosfwd>
 #include <iterator>

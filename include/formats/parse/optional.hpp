@@ -1,8 +1,6 @@
 #pragma once
 
-/// @file userver/formats/parse/boost_optional.hpp
 /// @brief Parsers and converters for boost::optional
-/// @ingroup userver_universal userver_formats_parse
 
 #include <formats/parse/to.hpp>
 

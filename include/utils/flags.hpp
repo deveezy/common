@@ -1,6 +1,5 @@
 #pragma once
 
-/// @file userver/utils/flags.hpp
 /// @brief Types that provide flags interface to enums
 
 #include <atomic>
@@ -12,7 +11,6 @@ namespace utils {
 template <typename Enum>
 class AtomicFlags;
 
-/// @ingroup userver_universal userver_containers
 ///
 /// @brief Wrapper to extend enum with flags interface
 template <typename Enum>
@@ -57,7 +55,6 @@ constexpr bool operator==(Enum, Flags<Enum>);
 template <typename Enum>
 constexpr bool operator!=(Enum, Flags<Enum>);
 
-/// @ingroup userver_universal userver_containers
 ///
 /// @brief Wrapper to extend enum with atomic flags interface
 template <typename Enum>

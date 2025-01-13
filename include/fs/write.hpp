@@ -1,8 +1,6 @@
 #pragma once
 
-/// @file userver/fs/blocking/write.hpp
 /// @brief Functions for synchronous (blocking) file write operations
-/// @ingroup userver_universal
 
 #include <string>
 #include <string_view>

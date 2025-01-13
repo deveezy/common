@@ -32,7 +32,7 @@ TEST(FormatsYaml, NullAsDefaulted) {
 
 TEST(FormatsYaml, ExampleUsage) {
   /// [Sample formats::yaml::Value usage]
-  // #include <userver/formats/yaml.hpp>
+  // #include <formats/yaml.hpp>
 
   formats::yaml::Value yaml = formats::yaml::FromString(R"(
   key1: 1

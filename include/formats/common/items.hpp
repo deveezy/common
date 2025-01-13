@@ -1,8 +1,6 @@
 #pragma once
 
-/// @file userver/formats/common/items.hpp
 /// @brief @copybrief formats::common::Items()
-/// @ingroup userver_universal
 
 #include <cstddef>
 #include <iterator>

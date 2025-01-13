@@ -1,6 +1,5 @@
 #pragma once
 
-/// @file userver/formats/yaml/types.hpp
 /// @brief Forward declarations of the internal YAML types.
 
 #include <type_traits>

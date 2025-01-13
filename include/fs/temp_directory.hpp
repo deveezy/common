@@ -1,6 +1,5 @@
 #pragma once
 
-/// @file userver/fs/blocking/temp_directory.hpp
 /// @brief @copybrief fs::blocking::TempDirectory
 
 #include <string>
@@ -8,7 +7,6 @@
 
 namespace fs {
 
-/// @ingroup userver_universal userver_containers
 ///
 /// @brief A unique directory for temporary files. The directory is deleted when
 /// the `TempDirectory` is destroyed.

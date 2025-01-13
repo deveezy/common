@@ -1,6 +1,5 @@
 #pragma once
 
-/// @file userver/utils/ip.hpp
 /// @brief IPv4 and IPv6 addresses and networks
 
 #include <array>
@@ -17,7 +16,6 @@
 // IP address and utilities
 namespace utils::ip {
 
-/// @ingroup userver_containers
 ///
 /// @brief Base class for IPv4/IPv6 addresses
 template <std::size_t N>
@@ -46,12 +44,10 @@ private:
   BytesType address_;
 };
 
-/// @ingroup userver_containers
 ///
 /// @brief IPv4 address in network bytes order
 using AddressV4 = AddressBase<4>;
 
-/// @ingroup userver_containers
 ///
 /// @brief IPv6 address in network bytes order
 using AddressV6 = AddressBase<16>;
@@ -74,7 +70,6 @@ std::string AddressV4ToString(const AddressV4 &address);
 /// @brief Get the address as a string in dotted decimal format.
 std::string AddressV6ToString(const AddressV6 &address);
 
-/// @ingroup userver_containers
 ///
 /// @brief Base class for IPv4/IPv6 network
 template <typename Address, typename = std::enable_if_t<kIsAddressType<Address>>>
@@ -127,12 +122,10 @@ private:
   unsigned char prefix_length_ = 0;
 };
 
-/// @ingroup userver_containers
 ///
 /// @brief IPv4 network.
 using NetworkV4 = NetworkBase<AddressV4>;
 
-/// @ingroup userver_containers
 ///
 /// @brief IPv6 network.
 using NetworkV6 = NetworkBase<AddressV6>;

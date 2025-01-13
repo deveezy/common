@@ -1,8 +1,6 @@
 #pragma once
 
-/// @file userver/formats/json.hpp
 /// @brief Include-all header for JSON support
-/// @ingroup userver_universal
 
 #include <formats/json/exception.hpp>
 #include <formats/json/inline.hpp>

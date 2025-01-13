@@ -1,6 +1,5 @@
 #pragma once
 
-/// @file userver/utils/datetime/date.hpp
 /// @brief @copybrief utils::datetime::Date
 
 #include <chrono>
@@ -13,7 +12,6 @@
 /// Date and time utilities
 namespace utils::datetime {
 
-/// @ingroup userver_universal userver_containers
 ///
 /// @brief Date in format YYYY-MM-DD, std::chrono::year_month_day like type.
 ///
@@ -57,7 +55,9 @@ Date DateFromRFC3339String(const std::string &date_string);
 std::string ToString(Date date);
 
 template <typename Value>
-std::enable_if_t<formats::common::kIsFormatValue<Value>, Date> Parse(const Value &value, formats::parse::To<Date>) {
+Date Parse(const Value &value, formats::parse::To<Date>)
+  requires(formats::common::kIsFormatValue<Value>)
+{
   std::string str;
   try {
     str = value.template As<std::string>();
@@ -73,7 +73,9 @@ std::enable_if_t<formats::common::kIsFormatValue<Value>, Date> Parse(const Value
 }
 
 template <typename Value>
-std::enable_if_t<formats::common::kIsFormatValue<Value>, Value> Serialize(Date date, formats::serialize::To<Value>) {
+Value Serialize(Date date, formats::serialize::To<Value>)
+  requires(formats::common::kIsFormatValue<Value>)
+{
   return typename Value::Builder(ToString(date)).ExtractValue();
 }
 

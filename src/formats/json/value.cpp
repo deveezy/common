@@ -21,15 +21,11 @@ namespace formats::json {
 
 namespace {
 
-static_assert(std::numeric_limits<double>::radix == 2,
-    "Your compiler provides double with an unusual radix, please "
-    "contact userver support chat");
+static_assert(std::numeric_limits<double>::radix == 2, "Your compiler provides double with an unusual radix, please ");
 static_assert(std::numeric_limits<double>::digits >= std::numeric_limits<int32_t>::digits,
-    "Your compiler provides unusually small double, please contact "
-    "userver support chat");
+    "Your compiler provides unusually small double");
 static_assert(std::numeric_limits<double>::digits < std::numeric_limits<int64_t>::digits,
-    "Your compiler provides unusually large double, please contact "
-    "userver support chat");
+    "Your compiler provides unusually large double");
 
 ::rapidjson::CrtAllocator g_allocator;
 
@@ -356,7 +352,7 @@ void Value::EnsureNotMissing() const {
 
   INVARIANT(!!holder_, "A moved-from Value is accessed");
 
-  INVARIANT(value_ptr_ != nullptr, "Something is terribly broken in userver json");
+  INVARIANT(value_ptr_ != nullptr, "Something is terribly broken in json");
 }
 
 bool Value::IsRoot() const noexcept { return holder_.Get() == value_ptr_; }

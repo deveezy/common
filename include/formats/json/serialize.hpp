@@ -1,6 +1,5 @@
 #pragma once
 
-/// @file userver/formats/json/serialize.hpp
 /// @brief Parsers and serializers to/from string and stream
 
 #include <iosfwd>

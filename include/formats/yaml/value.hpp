@@ -1,6 +1,5 @@
 #pragma once
 
-/// @file userver/formats/yaml/value.hpp
 /// @brief @copybrief formats::yaml::Value
 
 #include <type_traits>
@@ -17,7 +16,6 @@ namespace formats::yaml {
 
 class ValueBuilder;
 
-/// @ingroup userver_universal userver_containers userver_formats
 ///
 /// @brief Non-mutable YAML value representation.
 ///
@@ -28,7 +26,6 @@ class ValueBuilder;
 ///
 /// @snippet formats/yaml/value_test.cpp  Sample formats::yaml::Value usage
 ///
-/// @see @ref scripts/docs/en/userver/formats.md
 class Value final {
 public:
   struct IterTraits {
@@ -144,7 +141,6 @@ public:
   ///
   /// @snippet formats/yaml/value_test.cpp  Sample formats::yaml::Value::As<T>() usage
   ///
-  /// @see @ref scripts/docs/en/userver/formats.md
 
   // clang-format on
 
@@ -293,7 +289,7 @@ auto Value::As() const {
       "There is no `Parse(const Value&, formats::parse::To<T>)` in "
       "namespace of `T` or `formats::parse`. "
       "Probably you forgot to include the "
-      "<userver/formats/parse/common_containers.hpp> or you "
+      "<formats/parse/common_containers.hpp> or you "
       "have not provided a `Parse` function overload.");
 
   return Parse(*this, formats::parse::To<T> {});

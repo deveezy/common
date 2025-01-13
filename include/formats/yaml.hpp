@@ -1,8 +1,6 @@
 #pragma once
 
-/// @file userver/formats/yaml.hpp
 /// @brief Include-all header for YAML support
-/// @ingroup userver_universal
 
 #include <formats/yaml/exception.hpp>
 #include <formats/yaml/iterator.hpp>

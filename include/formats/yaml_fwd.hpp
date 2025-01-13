@@ -1,6 +1,5 @@
 #pragma once
 
-/// @file userver/formats/yaml_fwd.hpp
 /// @brief Forward declarations of formats::yaml types, formats::parse::To and
 /// formats::serialize::To.
 

@@ -1,6 +1,5 @@
 #pragma once
 
-/// @file userver/compiler/thread_local.hpp
 /// @brief Utilities for using thread-local variables in a coroutine-safe way
 
 #include <type_traits>

@@ -1,8 +1,6 @@
 #pragma once
 
-/// @file userver/formats/serialize/common_containers.hpp
 /// @brief Serializers for standard containers and optional
-/// @ingroup userver_universal userver_formats_serialize
 
 #include <optional>
 #include <type_traits>

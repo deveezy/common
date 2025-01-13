@@ -1,8 +1,6 @@
 #pragma once
 
-/// @file userver/utils/assert.hpp
 /// @brief Assertion macros ASSERT, ASSERT_MSG, INVARIANT
-/// @ingroup userver_universal
 
 #include <string_view>
 

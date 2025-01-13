@@ -1,6 +1,5 @@
 #pragma once
 
-/// @file userver/utils/not_null.hpp
 /// @brief @copybrief utils::NotNull
 
 #include <functional>
@@ -12,7 +11,6 @@
 
 namespace utils {
 
-/// @ingroup userver_universal userver_containers
 ///
 /// @brief Restricts a pointer or smart pointer to only hold non-null values.
 template <typename T>
@@ -95,15 +93,11 @@ private:
   T ptr_;
 };
 
-/// @ingroup userver_universal userver_containers
-///
 /// @brief A `std::shared_ptr` that is guaranteed to be not-null.
 /// @see MakeSharedRef
 template <typename U>
 using SharedRef = NotNull<std::shared_ptr<U>>;
 
-/// @ingroup userver_universal userver_containers
-///
 /// @brief A `std::unique_ptr` that is guaranteed to be not-null.
 /// @see MakeUniqueRef
 template <typename U>

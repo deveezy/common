@@ -1,6 +1,5 @@
 #pragma once
 
-/// @file userver/utils/macaddr/macaddr_base.hpp
 /// @brief MAC address types
 
 #include <array>
@@ -12,7 +11,6 @@
 
 namespace utils {
 
-/// @ingroup userver_containers
 ///
 /// @brief Base class for Macaddr/Macaddr8
 template <std::size_t N>
@@ -39,12 +37,10 @@ private:
   OctetsType macaddr_ = {0};
 };
 
-/// @ingroup userver_containers
 ///
 /// @brief 48-bit MAC address
 using Macaddr = MacaddrBase<6>;
 
-/// @ingroup userver_containers
 ///
 /// @brief 64-bit MAC address
 using Macaddr8 = MacaddrBase<8>;

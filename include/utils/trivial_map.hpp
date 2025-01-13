@@ -1,6 +1,5 @@
 #pragma once
 
-/// @file userver/utils/trivial_map.hpp
 /// @brief Bidirectional map|sets over string literals or other trivial types.
 
 #include <cstddef>
@@ -526,7 +525,6 @@ private:
 
 }  // namespace impl
 
-/// @ingroup userver_universal userver_containers
 ///
 /// @brief Bidirectional unordered map for trivial types, including string
 /// literals; could be efficiently used as a unordered non-bidirectional map.
@@ -725,7 +723,6 @@ private:
 template <typename BuilderFunc>
 TrivialBiMap(BuilderFunc) -> TrivialBiMap<BuilderFunc>;
 
-/// @ingroup userver_universal userver_containers
 ///
 /// @brief Unordered set for trivial types, including string literals.
 ///
@@ -791,7 +788,6 @@ TrivialSet(BuilderFunc) -> TrivialSet<BuilderFunc>;
 /// `formats::*::Value`.
 /// @throws ExceptionType or `Value::Exception` by default, if `value` is not a
 /// string, or if `value` is not contained in `map`.
-/// @see @ref scripts/docs/en/userver/formats.md
 template <typename ExceptionType = void, typename Value, typename BuilderFunc>
 auto ParseFromValueString(const Value &value, TrivialBiMap<BuilderFunc> map) {
   if constexpr (!std::is_void_v<ExceptionType>) {

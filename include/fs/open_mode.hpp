@@ -1,8 +1,6 @@
 #pragma once
 
-/// @file userver/fs/blocking/open_mode.hpp
 /// @brief @copybrief fs::blocking::OpenMode
-/// @ingroup userver_universal
 
 #include <utils/flags.hpp>
 

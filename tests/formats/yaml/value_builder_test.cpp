@@ -17,7 +17,7 @@ INSTANTIATE_TYPED_TEST_SUITE_P(FormatsYaml, CommonValueBuilderTests, formats::ya
 
 TEST(YamlValueBuilder, ExampleUsage) {
   /// [Sample formats::yaml::ValueBuilder usage]
-  // #include <userver/formats/yaml.hpp>
+  // #include <formats/yaml.hpp>
   formats::yaml::ValueBuilder builder;
   builder["key1"] = 1;
   formats::yaml::ValueBuilder sub_builder;

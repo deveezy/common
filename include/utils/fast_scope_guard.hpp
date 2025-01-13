@@ -3,12 +3,10 @@
 #include <type_traits>
 #include <utility>
 
-/// @file userver/utils/fast_scope_guard.hpp
 /// @brief @copybrief utils::FastScopeGuard
 
 namespace utils {
 
-/// @ingroup userver_universal userver_containers
 ///
 /// @brief a helper class to perform actions on scope exit
 ///

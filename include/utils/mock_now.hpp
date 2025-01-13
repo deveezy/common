@@ -1,8 +1,6 @@
 #pragma once
 
-/// @file userver/utils/mock_now.hpp
 /// @brief Mocking and getting mocked time values
-/// @ingroup userver_universal
 
 #include <chrono>
 

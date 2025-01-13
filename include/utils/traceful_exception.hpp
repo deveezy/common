@@ -1,6 +1,5 @@
 #pragma once
 
-/// @file userver/utils/traceful_exception.hpp
 /// @brief @copybrief utils::TracefulException
 
 #include <exception>
@@ -59,7 +58,6 @@ private:
   utils::FastPimpl<Impl, kSize, alignof(void *)> impl_;
 };
 
-/// @ingroup userver_universal userver_base_classes
 ///
 /// @brief Exception that remembers the backtrace at the point of its
 /// construction

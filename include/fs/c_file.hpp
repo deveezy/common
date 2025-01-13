@@ -1,6 +1,5 @@
 #pragma once
 
-/// @file userver/fs/blocking/c_file.hpp
 /// @brief @copybrief fs::blocking::CFile
 
 #include <cstdint>
@@ -8,15 +7,12 @@
 #include <string>
 #include <string_view>
 
-// #include <userver/utils/boost_filesystem_file_status.hpp>
-
 #include <fs/open_mode.hpp>
 #include <utils/fast_pimpl.hpp>
 #include <filesystem>
 
 namespace fs {
 
-/// @ingroup userver_universal userver_containers
 ///
 /// @brief A `std::FILE*` wrapper
 /// @details The file is closed in the destructor

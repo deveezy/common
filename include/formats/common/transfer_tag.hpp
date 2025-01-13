@@ -1,6 +1,5 @@
 #pragma once
 
-/// @file userver/formats/common/transfer_tag.hpp
 /// @brief @copybrief formats::common::TransferTag
 
 namespace formats::common {

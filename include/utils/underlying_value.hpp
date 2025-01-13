@@ -1,8 +1,6 @@
 #pragma once
 
-/// @file userver/utils/underlying_value.hpp
 /// @brief @copybrief utils::UnderlyingValue
-/// @ingroup userver_universal
 
 #include <type_traits>
 

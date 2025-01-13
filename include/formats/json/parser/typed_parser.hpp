@@ -74,7 +74,7 @@ private:
 /// ~~~~~~~~~~~~~~
 ///
 /// You may also implement a proxy parser. It derives neither from TypedParser
-/// nor any other userver's parser class. A proxy parser is a class that
+/// nor any other parser class. A proxy parser is a class that
 /// delegates the whole job of input token handling to subparser(s), but somehow
 /// mutates the result (e.g. converts or validates it) - proxies the result. It
 /// doesn't implement any JSON token handling methods by itself. Usually proxy

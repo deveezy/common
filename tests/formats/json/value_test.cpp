@@ -138,7 +138,7 @@ TEST(FormatsJson, NullAsDefaulted) {
 
 TEST(FormatsJson, ExampleUsage) {
   /// [Sample formats::json::Value usage]
-  // #include <userver/formats/json.hpp>
+  // #include <formats/json.hpp>
 
   formats::json::Value json = formats::json::FromString(R"({
     "key1": 1,

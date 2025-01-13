@@ -1,10 +1,8 @@
 #pragma once
 
-/// @file userver/formats/parse/common_containers.hpp
 /// @brief Parsers and converters for Standard Library containers and
 /// std::optional
 ///
-/// @ingroup userver_universal userver_formats_parse
 
 #include <optional>
 #include <type_traits>

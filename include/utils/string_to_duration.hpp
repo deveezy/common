@@ -1,8 +1,6 @@
 #pragma once
 
-/// @file userver/utils/string_to_duration.hpp
 /// @brief @copybrief utils::StringToDuration
-/// @ingroup userver_universal
 
 #include <chrono>
 #include <string>

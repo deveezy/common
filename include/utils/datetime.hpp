@@ -1,8 +1,6 @@
 #pragma once
 
-/// @file userver/utils/datetime.hpp
 /// @brief Date and Time related converters
-/// @ingroup userver_universal
 
 #include <chrono>
 #include <cstdint>

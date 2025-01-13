@@ -90,4 +90,10 @@ TEST(Datetime, kEmptyDatetime) {
   /// [kEmptyDatetime]
 }
 
+TEST(DateTime, LocalizeUnixTimezone) {
+  // const auto tp       = utils::datetime::Stringtime("2014-03-17T02:47:07+0000");
+  // const auto tz       = "EST5EDT,M3.2.0/02:00,M11.1.0/02:00";
+  // const auto localize = utils::datetime::Localize(tp, tz);
+}
+
 }  // namespace

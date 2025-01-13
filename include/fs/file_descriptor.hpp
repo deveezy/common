@@ -1,6 +1,5 @@
 #pragma once
 
-/// @file userver/fs/blocking/file_descriptor.hpp
 /// @brief @copybrief fs::blocking::FileDescriptor
 
 #include <string>
@@ -8,13 +7,10 @@
 
 #include <filesystem>
 
-// #include <userver/utils/boost_filesystem_file_status.hpp>
-
 #include <fs/open_mode.hpp>
 
 namespace fs {
 
-/// @ingroup userver_universal userver_containers
 ///
 /// @brief A file descriptor wrapper
 /// @details The file is closed in the destructor

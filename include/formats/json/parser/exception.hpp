@@ -1,7 +1,5 @@
 #pragma once
 
-#include <stdexcept>
-
 #include <fmt/format.h>
 
 #include <formats/json/exception.hpp>

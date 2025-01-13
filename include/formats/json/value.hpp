@@ -1,8 +1,5 @@
 #pragma once
 
-/// @file userver/formats/json/value.hpp
-/// @brief @copybrief formats::json::Value
-
 #include <chrono>
 #include <string_view>
 #include <type_traits>
@@ -16,10 +13,6 @@
 #include <formats/json/serialize.hpp>
 #include <formats/json/string_builder_fwd.hpp>
 #include <formats/parse/common.hpp>
-
-namespace logging {
-class LogHelper;
-}  // namespace logging
 
 namespace formats::json {
 namespace impl {
@@ -41,7 +34,6 @@ namespace parser {
 class JsonValueParser;
 }  // namespace parser
 
-/// @ingroup userver_universal userver_containers userver_formats
 ///
 /// @brief Non-mutable JSON value representation.
 ///
@@ -52,7 +44,6 @@ class JsonValueParser;
 ///
 /// @snippet formats/json/value_test.cpp  Sample formats::json::Value usage
 ///
-/// @see @ref scripts/docs/en/userver/formats.md
 class Value final {
 public:
   struct IterTraits {
@@ -167,7 +158,6 @@ public:
   ///
   /// @snippet formats/json/value_test.cpp  Sample formats::json::Value::As<T>() usage
   ///
-  /// @see @ref scripts/docs/en/userver/formats.md
 
   // clang-format on
 
@@ -330,7 +320,7 @@ auto Value::As() const {
       "There is no `Parse(const Value&, formats::parse::To<T>)` "
       "in namespace of `T` or `formats::parse`. "
       "Probably you forgot to include the "
-      "<userver/formats/parse/common_containers.hpp> or you "
+      "<formats/parse/common_containers.hpp> or you "
       "have not provided a `Parse` function overload.");
 
   return Parse(*this, formats::parse::To<T> {});

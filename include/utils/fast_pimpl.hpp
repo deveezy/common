@@ -8,7 +8,6 @@ namespace utils {
 
 inline constexpr bool kStrictMatch = true;
 
-/// @ingroup userver_universal userver_containers
 ///
 /// @brief Implements pimpl idiom without dynamic memory allocation.
 ///

@@ -1,6 +1,5 @@
 #pragma once
 
-/// @file userver/utils/boost_uuid4.hpp
 /// @brief @copybrief utils::generators::GenerateBoostUuid()
 
 #include <boost/uuid/uuid.hpp>

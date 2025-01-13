@@ -1,13 +1,11 @@
 #pragma once
 
-/// @file userver/utils/overloaded.hpp
 /// @brief @copybrief utils::Overloaded
 
 #include <variant>
 
 namespace utils {
 
-/// @ingroup userver_universal
 ///
 /// @brief Utility to define std::variant visitors in a simple way
 template <class... Ts>

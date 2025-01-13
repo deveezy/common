@@ -1,8 +1,6 @@
 #pragma once
 
-/// @file userver/formats/json/serialize_duration.hpp
 /// @brief Serializers for std::chrono::duration types.
-/// @ingroup userver_universal userver_formats_serialize
 
 #include <chrono>
 

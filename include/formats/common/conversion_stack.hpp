@@ -1,6 +1,5 @@
 #pragma once
 
-/// @file userver/formats/common/conversion_stack.hpp
 /// @brief @copybrief formats::common::ConversionStack
 
 #include <cstdint>

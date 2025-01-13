@@ -1,8 +1,6 @@
 #pragma once
 
-/// @file userver/formats/common/meta.hpp
 /// @brief Metaprogramming helpers for converters detection.
-/// @ingroup userver_universal
 
 #include <type_traits>
 

@@ -1,8 +1,6 @@
 #pragma once
 
-/// @file userver/formats/serialize/boost_uuid.hpp
 /// @brief boost::uuids::uuid serializer to any format
-/// @ingroup userver_universal userver_formats_serialize
 
 #include <boost/uuid/uuid.hpp>
 #include <string>

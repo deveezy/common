@@ -1,8 +1,6 @@
 #pragma once
 
-/// @file userver/utils/datetime/timepoint_tz.hpp
 /// @brief Timepoint with timezone
-/// @ingroup userver_universal
 
 #include <chrono>
 #include <string>

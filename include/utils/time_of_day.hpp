@@ -1,6 +1,5 @@
 #pragma once
 
-/// @file userver/utils/time_of_day.hpp
 /// @brief @copybrief utils::datetime::TimeOfDay
 
 #include <algorithm>
@@ -11,12 +10,8 @@
 
 #include <fmt/format.h>
 
-// #include <userver/utils/fmt_compat.hpp>
-
 namespace utils::datetime {
 
-/// @ingroup userver_universal userver_containers
-///
 /// @brief A simple implementation of a "time since midnight" datatype.
 ///
 /// This type is time-zone ignorant.

@@ -53,7 +53,7 @@ TEST(ThreadLocal, Sample) {
 
 /// [sample factory]
 // NOTE: if you need thread-local randomness, don't roll your own!
-// See <userver/utils/rand.hpp> and <userver/crypto/random.hpp> first!
+// See <utils/rand.hpp> and <userver/crypto/random.hpp> first!
 compiler::ThreadLocal local_rng = [] { return std::minstd_rand {utils::Rand()}; };
 
 std::uint32_t MyRand() {

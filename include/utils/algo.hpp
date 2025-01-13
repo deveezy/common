@@ -1,8 +1,6 @@
 #pragma once
 
-/// @file userver/utils/algo.hpp
 /// @brief Small useful algorithms.
-/// @ingroup userver_universal
 
 #include <algorithm>
 #include <cstddef>

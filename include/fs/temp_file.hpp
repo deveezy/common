@@ -1,6 +1,5 @@
 #pragma once
 
-/// @file userver/fs/blocking/temp_file.hpp
 /// @brief @copybrief fs::blocking::TempFile
 
 #include <string>
@@ -8,7 +7,6 @@
 
 namespace fs {
 
-/// @ingroup userver_universal userver_containers
 ///
 /// @brief A unique temporary file. The file is deleted when the `TempFile`
 /// object is destroyed.

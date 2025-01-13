@@ -1,6 +1,5 @@
 #pragma once
 
-/// @file userver/formats/json/iterator.hpp
 /// @brief @copybrief formats::json::Iterator
 
 #include <iterator>

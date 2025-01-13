@@ -1,6 +1,5 @@
 #pragma once
 
-/// @file userver/formats/json/string_builder.hpp
 /// @brief @copybrief formats::json::StringBuilder
 
 #include <string>
@@ -16,7 +15,6 @@ namespace formats::json {
 
 // clang-format off
 
-/// @ingroup userver_universal userver_containers userver_formats userver_formats_serialize_sax
 ///
 /// @brief SAX like builder of JSON string. Use with extreme caution and only in
 /// performance critical part of your code.
@@ -27,7 +25,6 @@ namespace formats::json {
 ///
 /// @snippet formats/json/string_builder_test.cpp  Sample formats::json::StringBuilder usage
 ///
-/// @see @ref scripts/docs/en/userver/formats.md
 
 // clang-format on
 

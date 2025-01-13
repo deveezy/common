@@ -1,8 +1,6 @@
 #pragma once
 
-/// @file userver/formats/json/exception.hpp
 /// @brief Exception classes for JSON module
-/// @ingroup userver_universal
 
 #include <iosfwd>
 #include <stdexcept>

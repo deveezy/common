@@ -1,8 +1,6 @@
 #pragma once
 
-/// @file userver/formats/common/type.hpp
 /// @brief @copybrief formats::common::Type
-/// @ingroup userver_universal
 
 /// Common utilities for all the formats
 namespace formats::common {

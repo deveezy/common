@@ -1,6 +1,5 @@
 #pragma once
 
-/// @file userver/formats/json_fwd.hpp
 /// @brief Forward declarations of formats::json types, formats::parse::To and
 /// formats::serialize::To.
 

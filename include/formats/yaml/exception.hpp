@@ -1,8 +1,6 @@
 #pragma once
 
-/// @file userver/formats/yaml/exception.hpp
 /// @brief Exception classes for YAML module
-/// @ingroup userver_universal
 
 #include <iosfwd>
 #include <stdexcept>

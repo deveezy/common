@@ -1,6 +1,5 @@
 #pragma once
 
-/// @file userver/utils/strong_typedef.hpp
 /// @brief @copybrief utils::StrongTypedef
 
 #include <functional>
@@ -41,7 +40,6 @@ constexpr auto operator|(StrongTypedefOps op1, StrongTypedefOps op2) noexcept {
   return StrongTypedefOps {utils::UnderlyingValue(op1) | utils::UnderlyingValue(op2)};
 }
 
-/// @ingroup userver_universal userver_containers
 ///
 /// @brief Strong typedef for a type T.
 ///

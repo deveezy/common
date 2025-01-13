@@ -1,14 +1,11 @@
 #pragma once
 
-/// @file userver/utils/atomic.hpp
 /// @brief Helper algorithms to work with atomics
-/// @ingroup userver_universal userver_concurrency
 
 #include <atomic>
 
 namespace utils {
 
-/// @ingroup userver_concurrency
 ///
 /// @brief Atomically performs the operation of `updater` on `atomic`
 /// @details `updater` may be called multiple times per one call of
@@ -32,7 +29,6 @@ T AtomicUpdate(std::atomic<T> &atomic, Func updater) {
   }
 }
 
-/// @ingroup userver_concurrency
 ///
 /// @brief Concurrently safe sets `atomic` to a `value` if `value` is less
 ///
@@ -42,7 +38,6 @@ T AtomicMin(std::atomic<T> &atomic, T value) {
   return utils::AtomicUpdate(atomic, [value](T old_value) { return value < old_value ? value : old_value; });
 }
 
-/// @ingroup userver_concurrency
 ///
 /// @brief Concurrently safe sets `atomic` to a `value` if `value` is greater
 ///
